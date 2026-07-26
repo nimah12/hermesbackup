@@ -29,6 +29,9 @@ The user (Nima) has explicitly requested these rules. Follow ALL of them every t
 7. **Always provide links** — The user wants clickable links to the products/pages found. Include URLs in results.
 8. **Don't stop at one search** — If the first query doesn't find enough results, try alternative search terms (e.g., "i5-4570" vs "اینتل 4570" vs "پردازنده 4570").
 9. **Language** — User prefers Persian (Farsi). Respond in Persian.
+10. **CRITICAL: Currency units** — 1 Toman = 10 Rial. Most Iranian sites show prices in Toman. NEVER mix up Toman and Rial. If a site shows Rial, convert to Toman for display (divide by 10). Always verify the unit before reporting to the user.
+11. **MINIMUM 10 sites per product** — The user explicitly requested at least 10 sites per product search. If one site blocks you, move to the next. Don't stop early. The user listed required sites: Digikala, Emalls, Sheypoor, Divar, Snapp, Tapsi, Torob, eSAm, Computer Parsian, Zoomit.
+12. **Show results from ALL sites** — Don't default to just Basalam. Present results from EVERY site that returns data. The user was very frustrated when only Basalam results were shown.
 
 ## Setup (one-time)
 
@@ -74,6 +77,10 @@ The user explicitly asked: "وقتی بهت میگم برو قیمت قطعات 
 | 🔧 Tools/Industrial | digikala, bazargan.com | car sites |
 | 🚗 Auto Parts | khodro45, basalam, sheypoor | shop sites |
 | 🎮 Gaming | digikala, basalam | car sites |
+| 💎 Gold/Coin | tala.ir, mesghal.com, bonbast.com | — |
+| 💵 Currency/USD | bonbast.com, bestchange.ir | — |
+| ₿ Crypto | coindesk.com, coinmarketcap.com | — |
+| 🛢️ Oil | oilprice.com, reuters.com | — |
 
 **Auto-detect keywords:**
 - car: پراید, پژو, سمند, تیبا, 206, 405, خودرو, BMW, etc.
@@ -89,11 +96,21 @@ The user explicitly asked: "وقتی بهت میگم برو قیمت قطعات 
 |------|--------|--------|
 | digikala.com | Playwright | ✅ Best coverage, JS-heavy |
 | basalam.com | **API direct** | ✅ Fastest, no browser needed |
+| sheypoor.com | Playwright | ✅ Classifieds, verify currency unit |
+| divar.ir | Playwright | ✅ Classifieds, prices in Toman |
 | technolife.com | Playwright | ✅ Electronics/laptops |
 | digistyle.com | Playwright | ✅ Fashion/beauty |
 | sodamarket.com | Playwright | ✅ General |
 | modiseh.com | Playwright | ✅ Fashion/clothing |
+| bazargan.com | Playwright | ✅ Industrial/tools |
+| nashr.com | Playwright | ✅ Books |
+| mobile.ir | Playwright | ✅ Mobile phones |
+| zoomit.ir | Playwright | ✅ Tech news/comparison |
+| parsiancomputer.com | Playwright | ✅ Computer parts |
+| esam.ir | Playwright | ✅ Electronics marketplace |
 | torob.com | Playwright | ⚠️ CAPTCHA from cloud IPs |
+| emalls.ir | Playwright | ⚠️ SSL issues, sometimes works |
+| snapp.market | Playwright | ⚠️ Grocery, limited electronics |
 
 ### Car & Motorcycle
 | Site | Method | Status |
@@ -136,7 +153,9 @@ PERSIAN_DIGITS = str.maketrans('۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', '0123
 
 ## Pitfalls
 
-- **USER FRUSTRATION: Limiting to one site** — I once showed only Basalam results. The user was VERY frustrated. ALWAYS search ALL sites in the category and present comprehensive results.
+- **CRITICAL: Currency unit confusion** — I repeatedly wrote Rial prices as Toman. The user was EXTREMELY frustrated (used angry emojis). 1 Toman = 10 Rial. Most Iranian sites use Toman, BUT some (especially Sheypoor, older classifieds) may use Rial without showing the unit. ALWAYS verify the unit before reporting. If uncertain, check the product page directly. Default to Toman but FLAG uncertainty.
+- **CRITICAL: Not searching enough sites** — User explicitly listed required sites: Digikala, Emalls, Sheypoor, Divar, Snapp, Tapsi, Torob, eSAm, Computer Parsian, Zoomit. The user said "وقتی بهت میگم ده تا سایت یعنی دیجیکالا ایمالز شیپور دیوار اسنپ تپسی ترب esam کامپیوتر پارسیان زومیت". ALWAYS search at least 10 sites per product. If one site blocks you, move to the next — don't stop.
+- **USER FRUSTRATION: Limiting to one site** — I once showed only Basalam results. The user was VERY frustrated. ALWAYS search ALL sites in the category and present comprehensive results from EVERY site that works.
 - **USER FRUSTRATION: Searching wrong categories** — I once searched car sites for computer parts. The user said "وقتمو تلف نکن". ALWAYS detect category first.
 - **USER FRUSTRATION: Not providing links** — The user wants clickable links to products. Always include URLs.
 - **Torob CAPTCHA/timeout**: From certain IPs (cloud servers), Torob blocks completely. Report as غیردسترس.
@@ -151,3 +170,5 @@ PERSIAN_DIGITS = str.maketrans('۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', '0123
 - **Search terms**: Try multiple variations — English model numbers + Persian descriptions yield different results.
 - **Car sites**: Basalam returns parts, not full vehicles. For actual cars, use Divar/Bama/Khodro45.
 - **Persian numerals**: All Iranian sites use فارسی digits. Always convert before price parsing.
+- **Currency detection**: Check each price line for "تومان" or "ریال". Default assumption is Toman. Convert Rial to Toman (÷10) for display.
+- **Market monitoring**: A cron job runs every 4 hours checking gold, coin, USD, oil prices and Middle East news. Alert user if >5% fluctuation or major news event.

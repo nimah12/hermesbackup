@@ -31,3 +31,5 @@ MARKET MONITORING (must alert user):
 - Cryptocurrency: coindesk.com, coinmarketcap.com
 - Oil prices: oilprice.com, reuters.com
 Alert user when: 1) Sudden price changes >5% in gold/coin/currency, 2) Major Middle East news (war, conflict), 3) Significant oil price movements. Use cron job for monitoring.
+§
+ALWAYS include direct product links when reporting prices. After showing prices, add clickable links for each result so user can directly visit the product page.
