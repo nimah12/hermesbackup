@@ -6,3 +6,19 @@ Site categorization - DO NOT mix categories:
 - MOTORCYCLES: divar, bama, khodro45 (NOT shop sites)
 - FASHION/CLOTHING: modiseh, digistyle
 When user asks for a product, detect category FIRST, then only search relevant sites. Don't waste time on unrelated sites.
+§
+Full site categorization for price search:
+🖥️ COMPUTER/LAPTOP: digikala, basalam, sheypoor, sodamarket, technolife, digistyle, torob
+🚗 CARS: divar, bama, khodrobank, hamrah-mechanic, khodro45
+🏍️ MOTORCYCLES: divar, bama, khodro45
+👗 FASHION: modiseh, digistyle
+📱 MOBILE/TABLET: digikala, basalam, mobile.ir
+🏠 HOME/KITCHEN: digikala, basalam
+💄 COSMETICS: digikala, basalam
+📚 BOOKS: digikala, nashr.com
+🔧 TOOLS/INDUSTRIAL: digikala, bazargan.com
+🍽️ FOOD/GROCERY: snappmarket, filfil
+🚗 AUTO PARTS: khodro45, basalam, sheypoor
+🎭 ENTERTAINMENT: digikala, basalam
+🎮 GAMING: digikala, basalam
+💡 USER PREFERENCES: Persian language, price is top priority, give personal recommendations, don't limit to one site, compare min/avg/max prices
