@@ -1,4 +1,4 @@
-When user asks for product prices: 1) Search ALL Iranian sites (basalam, digikala, divar, bama, khodro45, khodrobank, shenoto, technolife, sodamarket, galaxym, digistyle, torob). 2) Compare lowest, average and highest prices. 3) Consider product condition, warranty and seller reliability. 4) Always give personal recommendations and advice. 5) Price is user's top priority - always find the best deal.
+PRICE SEARCH RULES: 1) Search ALL relevant sites per category. 2) Compare min/avg/max prices. 3) Check condition, warranty, seller reliability. 4) Give personal recommendations. 5) Price is top priority. CURRENCY: 1 Toman = 10 Rial. Most shops use Toman. NEVER mix Toman/Rial. Always verify unit before reporting.
 §
 Site categorization - DO NOT mix categories:
 - COMPUTER PARTS: digikala, basalam, sheypoor, sodamarket, technolife, digistyle, torob (NOT car sites)
