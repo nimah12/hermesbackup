@@ -31,11 +31,21 @@
 ### Cars & Motorcycles
 | Site | URL | Status | Notes |
 |------|-----|--------|-------|
-| Divar | divar.ir | ✅ Works | Best for used cars/motorcycles, city-specific URLs |
-| Bama | bama.ir | ✅ Works | Largest car marketplace |
-| Khodro45 | khodro45.com | ✅ Works | Car listings |
+| Divar | divar.ir | ⚠️ Slow/Timeout | Best for used cars/motorcycles, city-specific URLs. **Playwright times out (60s+)**. Use API or simple curl + regex instead. |
+| Bama | bama.ir | ⚠️ Slow/Timeout | Largest car marketplace. **No direct search URL** — requires search input interaction. Playwright often times out. |
+| Khodro45 | khodro45.com | ✅ Works | Car listings, simpler HTML |
 | Khodrobank | khodrobank.com | ✅ Works | Car prices & reviews |
 | Hamrah Mechanic | hamrah-mechanic.com | ✅ Works | Car marketplace |
+
+### Financial Markets (Gold/Currency/Crypto) — **Primary Sources**
+| Site | URL | Status | Notes |
+|------|-----|--------|-------|
+| **tgju.org** | tgju.org | ✅ **Best for live prices** | **Tehran Gold & Currency Exchange — PRIMARY SOURCE**. Profiles: `geram18` (18k gold/gram), `price_dollar_rl` (USD), `price_usdt_rl` (USDT), `emami1` (Emami coin), `bahar_azadi` (Bahar Azadi coin). **Real-time, no Playwright needed** (simple curl works). All prices in RIAL (÷10 = Toman). |
+| mesghal.com | mesghal.com | ✅ Works | Good for gold/coin, but prices may be daily not live. HTML is clean. |
+| bonbast.com | bonbast.com | ⚠️ Needs Playwright | Gold + currency combined. IDs: #usd1, #usd2, #gol18_top, #emami1_top. |
+| tala.ir | tala.ir | ✅ Works | News + prices, daily updates. |
+| bestchange.com | bestchange.com | ✅ Works | USDT/exchanger rates. Simple HTML tables. |
+| tala.ir | tala.ir | ✅ Works | News + prices, daily updates. |
 
 ### Blocked / Deprecated
 | Site | URL | Status | Issue |
@@ -78,8 +88,15 @@ text.translate(PERSIAN_DIGITS)
 Product name on one line, price on a nearby line (within 15 lines).
 
 ### Divar
-Format: `car name | mileage | price تومان`
-Example: `پراید ۱۳۲ | ۲۳۰ کیلومتر | ۵۲۰,۰۰۰,۰۰۰ تومان`
+**List View Format**: `car name | mileage` (NO price in list — must visit detail page)
+Example: `پراید ۱۳۲ | ۲۳۰ کیلومتر`
+**Detail Page**: Price appears with "تومان" suffix
+
+**Working Selectors (July 2026)**:
+- Container: `article.kt-post-card` or `class="kt-post-card kt-post-card--outlined"`
+- Title: `class="kt-post-card__title"`
+- Description/Mileage: `class="kt-post-card__description"`
+- Link: `href="/v/{token}"`
 
 ### Sheypoor
 Format: product name, then price on next line. NO unit shown — verify manually.

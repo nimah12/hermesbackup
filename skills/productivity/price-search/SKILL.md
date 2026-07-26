@@ -202,10 +202,20 @@ PERSIAN_DIGITS = str.maketrans('۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', '0123
 ## Pitfalls
 
 - **CRITICAL: Currency unit confusion** — I repeatedly wrote Rial prices as Toman. The user was EXTREMELY frustrated (used angry emojis). 1 Toman = 10 Rial. Most Iranian sites use Toman, BUT some (especially Sheypoor, older classifieds) may use Rial without showing the unit. ALWAYS verify the unit before reporting. If uncertain, check the product page directly. Default to Toman but FLAG uncertainty.
+- **CRITICAL: Never modify Hermes default config** — User explicitly forbids touching `model.context_length`, `agent.max_turns`, `compression.threshold`, etc. Changing `model.context_length` broke things previously. Only modify config when explicitly asked.
+- **CRITICAL: Always verify current date before reporting prices** — I reported "1403" instead of actual "1405". ALWAYS check system date or page timestamp before writing any date in responses.
+- **CRITICAL: Use tgju.org as PRIMARY source for live market prices** — mesghal.com shows daily snapshots (may be stale). tgju.org updates in real-time (seconds). For market monitoring cron, use tgju.org profiles via curl (no JS needed).
+- **CRITICAL: Minimum 10 sites per product search** — User explicitly listed required sites. If one site fails, move to next immediately. Don't stop early. Report which sites failed.
+- **USER FRUSTRATION: Only showing Basalam results** — Search ALL sites in category, present results from EVERY site that returns data.
+- **USER FRUSTRATION: Wrong category searches** — Detect category FIRST, then ONLY search relevant sites.
+- **USER FRUSTRATION: No clickable links** — Always include direct URLs to products/pages.
 - **CRITICAL: Not searching enough sites** — User explicitly listed required sites: Digikala, Emalls, Sheypoor, Divar, Snapp, Tapsi, Torob, eSAm, Computer Parsian, Zoomit. The user said "وقتی بهت میگم ده تا سایت یعنی دیجیکالا ایمالز شیپور دیوار اسنپ تپسی ترب esam کامپیوتر پارسیان زومیت". ALWAYS search at least 10 sites per product. If one site blocks you, move to the next — don't stop.
 - **USER FRUSTRATION: Limiting to one site** — I once showed only Basalam results. The user was VERY frustrated. ALWAYS search ALL sites in the category and present comprehensive results from EVERY site that works.
 - **USER FRUSTRATION: Searching wrong categories** — I once searched car sites for computer parts. The user said "وقتمو تلف نکن". ALWAYS detect category first.
 - **USER FRUSTRATION: Not providing links** — The user wants clickable links to products. Always include URLs.
+- **CRITICAL: Wrong dates in price reports** — Session 2026-07-26: I reported mesghal.com data as "5 Mordad 1403" when it was actually 1405. The user was furious (😡😡😡). ALWAYS verify the date on the source page before reporting. Use tgju.org which shows correct Jalali dates.
+- **CRITICAL: Wrong price source** — mesghal.com showed stale/old prices (14,800,000 Rial = 1,480,000 Toman for 18k gold) while tala.ir showed correct 17,878,900 Toman. Cross-reference multiple sources. tgju.org and tala.ir are more reliable for gold/currency.
+- **CRITICAL: Date verification** — Before reporting ANY price, check the page's displayed date. The share link https://share.google/5PuM49weUHtgTI3u6 showed "آخرین به روز رسانی در تاریخ دوشنبه، ۵ مرداد ۱۴۰۵" — always include this in reports.
 - **Torob CAPTCHA/timeout**: From certain IPs (cloud servers), Torob blocks completely. Report as غیردسترس.
 - **digikala timeouts**: Use `wait_until="domcontentloaded"` not `"networkidle"`.
 - **Divar car URL**: Must use `https://divar.ir/s/tehran/car` (city-specific).
@@ -220,3 +230,12 @@ PERSIAN_DIGITS = str.maketrans('۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', '0123
 - **Persian numerals**: All Iranian sites use فارسی digits. Always convert before price parsing.
 - **Currency detection**: Check each price line for "تومان" or "ریال". Default assumption is Toman. Convert Rial to Toman (÷10) for display.
 - **Market monitoring**: A cron job runs every 4 hours checking gold, coin, USD, oil prices and Middle East news. Alert user if >5% fluctuation or major news event.
+
+## Reference Files
+
+- `references/session-notes.md` — Session notes including Playwright setup, user preferences, and critical config warning
+- `references/site-status.md` — Current status of all Iranian e-commerce/car sites with URL patterns and selectors
+- `references/basalam-api.md` — Basalam API documentation (direct API, no browser needed)
+- `references/market-monitoring.md` — Financial market monitoring patterns (gold, currency, crypto, oil, ME news)
+- `references/tgju-api.md` — **tgju.org API patterns** — Tehran Gold & Currency Exchange real-time prices (PRIMARY SOURCE for gold/currency)
+- `references/session-2026-07-26-car-search-patterns.md` — Working selectors, API endpoints, and patterns for car searches (Divar, Basalam API, Bama, Khodro45). Includes July 2026 selectors for Divar (`kt-post-card__title`, `kt-post-card__description`).

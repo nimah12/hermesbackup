@@ -67,17 +67,17 @@
       "schedule_display": "every 240m",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 1
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T18:39:23.114707+00:00",
-      "next_run_at": "2026-07-26T22:39:23.118276+00:00",
-      "last_run_at": null,
-      "last_status": null,
-      "last_error": null,
+      "next_run_at": "2026-07-27T02:39:31.966913+00:00",
+      "last_run_at": "2026-07-26T22:39:31.966913+00:00",
+      "last_status": "error",
+      "last_error": "RuntimeError: Skipped to prevent unintended spend: global inference config drifted since this job was created (provider 'openrouter' -> 'openai-api'), and this job is unpinned. No inference call was made. To run on the new config, pin it explicitly: `cronjob action=update job_id=9164df07a972 provider=<provider> model=<model>` (or pin the original values to keep them). See #44585.",
       "last_delivery_error": null,
       "deliver": "origin",
       "origin": {
@@ -88,7 +88,8 @@
         "user_id": "7148403012"
       },
       "enabled_toolsets": null,
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "b958db049423",
@@ -138,7 +139,7 @@
     {
       "id": "11d3ff670878",
       "name": "Market Price Monitoring",
-      "prompt": "Market price monitoring job. Run every 3 hours. Check prices from:\n- Gold/Coin: tala.ir, mesghal.com, bonbast.com\n- Currency/USDT: bonbast.com, bestchange.ir\n- Crypto: coindesk.com, coinmarketcap.com\n- Oil: oilprice.com, reuters.com\n\nAlert conditions:\n1. Gold/Coin/Currency: >5% change vs last stored value\n2. Major Middle East news: war, conflict, sanctions, nuclear talks\n3. Oil: >3% daily change\n\nActions: scrape prices, compare with /data/.hermes/market_prices.json, send Telegram alert only if threshold exceeded with asset name, old/new price, % change, source link. Save new prices to JSON. Silent if no alerts. Response in Persian.",
+      "prompt": "Market price monitoring job. Run every 3 hours. Check prices from MULTIPLE Iranian and international sources:\n\n**\ud83e\udd47 Gold/Coin (IRAN - multiple sources):**\n- https://www.iranjib.ir/showgroup/23/realtime_price/ (primary)\n- https://talasea.ir/ (cross-check)\n- https://mesghal.com/ (gold/coin prices)\n- https://www.tgju.org/profile/price_gold_18 (18k gold)\n- https://www.tgju.org/profile/price_gold_24 (24k gold)\n\n**\ud83d\udcb5 Currency/USDT (IRAN):**\n- https://bonbast.com/ (free market USD, EUR, GBP, USDT)\n- https://www.tgju.org/profile/price_dollar_rl (dollar free market)\n- https://www.tgju.org/profile/price_usdt_rl (USDT free market)\n- https://bestchange.com/ (USDT rates from exchangers)\n\n**\u20bf Crypto (International):**\n- https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=1&limit=20&sortBy=market_cap&sortType=desc&convert=USD (BTC, ETH, USDT, BNB, SOL, XRP)\n- https://api.coindesk.com/v1/bpi/currentprice.json (BTC price)\n\n**\ud83d\udee2\ufe0f Oil (International):**\n- https://www.oilprice.com/ (Brent, WTI)\n- https://www.reuters.com/markets/commodities/ (oil news + prices)\n\n**\ud83d\udcf0 Middle East News (for alerts):**\n- https://www.reuters.com/world/middle-east/\n- https://www.aljazeera.net/where/middle-east\n\n**\ud83d\udcc8 Telegram Channels for Market Analysis (gold, currency, crypto, economic analysis):**\n- @talasea_ir \u2192 https://t.me/talasea_ir\n- @ecoshariff \u2192 https://t.me/ecoshariff\n- @se_pz \u2192 https://t.me/se_pz\n- @eco_roozbeh \u2192 https://t.me/eco_roozbeh\n\n**Alert Conditions (each checked separately):**\n1. Gold/Coin/Currency: Sudden change >5% vs last stored value\n2. Major Middle East news: war, conflict, new sanctions, nuclear talks\n3. Oil: >3% daily change\n4. Telegram channel analysis: If channels report major market moves, policy changes, or breaking economic news\n\n**Actions:**\n1. Scrape/check ALL web sources above (use Playwright for JS sites, direct API for JSON endpoints)\n2. Fetch recent posts from 4 Telegram channels via t.me web interface - extract market-relevant content (price predictions, breaking news, policy announcements, technical analysis)\n3. For each asset, take median/average of available web sources (more reliable than single source)\n4. Compare with last stored values in /data/.hermes/market_prices.json\n5. If threshold exceeded OR Telegram channels signal major move \u2192 Send Telegram alert with: asset name, old/new price, % change, source links (web + Telegram)\n6. Save new aggregated prices to JSON for next comparison\n7. Silent if no alerts (no message on normal runs)\n\n**Language:** Persian\n**Tools:** Playwright (web), terminal (curl/API), file (JSON storage)",
       "skills": [
         "price-search"
       ],
@@ -185,7 +186,109 @@
         "file"
       ],
       "workdir": null
+    },
+    {
+      "id": "eba28df13194",
+      "name": "Gold Price Alert - talasea.ir",
+      "prompt": "Gold price monitoring from talasea.ir. Run every 30 minutes.\n\n**Source:** https://talasea.ir/\n- Scrape gold prices (18k, 24k per gram, mesghal, ounce)\n- Also check coin prices if available\n\n**Alert Condition:**\n- Any gold price (18k, 24k, mesghal, ounce) changes >5% vs last stored value\n- Compare with values saved in /data/.hermes/talasea_gold_prices.json\n\n**Actions:**\n1. Use Playwright to fetch https://talasea.ir/\n2. Extract gold prices from the page\n3. Compare with last stored prices in JSON file\n4. If any gold price changed >5% \u2192 Send Telegram alert with:\n   - Gold type (18k, 24k, mesghal, ounce)\n   - Old price, new price, % change\n   - Source link: https://talasea.ir/\n5. Save new prices to /data/.hermes/talasea_gold_prices.json\n6. Silent if no alerts (no message on normal runs)\n\n**Language:** Persian\n**Tools:** Playwright (web), file (JSON storage)",
+      "skills": [
+        "price-search"
+      ],
+      "skill": "price-search",
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "openai-api",
+      "model_snapshot": "mimohermes",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 30,
+        "display": "every 30m"
+      },
+      "schedule_display": "every 30m",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-26T22:48:56.845343+00:00",
+      "next_run_at": "2026-07-26T23:18:56.849187+00:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "7148403012",
+        "chat_name": "Nima",
+        "thread_id": null,
+        "user_id": "7148403012"
+      },
+      "enabled_toolsets": [
+        "web",
+        "terminal",
+        "file"
+      ],
+      "workdir": null
+    },
+    {
+      "id": "3eaeabca4dae",
+      "name": "Middle East War/Conflict Alert - Telegram Channels",
+      "prompt": "Telegram channel monitoring for Middle East war/conflict alerts. Run every 3 hours.\n\n**Telegram Channels to Monitor (via t.me web interface):**\n1. @iranintltv \u2192 https://t.me/iranintltv\n2. @km_ap \u2192 https://t.me/km_ap\n3. @ne_wg \u2192 https://t.me/ne_wg\n4. @tasnimnews \u2192 https://t.me/tasnimnews\n5. @tabzlive \u2192 https://t.me/tabzlive\n6. @alibk3 \u2192 https://t.me/alibk3\n7. @farsna \u2192 https://t.me/farsna\n8. @khabari_18 \u2192 https://t.me/khabari_18\n\n**What to Look For (Serious Alert Triggers):**\n- Missile strikes / rocket attacks / drone attacks on any Middle East location\n- Military engagement / direct conflict between nations\n- Iran-specific: attacks on Iran, Iran's military actions, nuclear facility incidents\n- Israel-Iran tensions, proxy conflicts (Hezbollah, Houthis, etc.)\n- US military movements in region, carrier strike groups\n- Official war declarations, emergency alerts, air raid sirens\n- Major escalation language: \"\u062c\u0646\u06af\", \"\u0645\u0648\u0634\u06a9\", \"\u062d\u0645\u0644\u0647\", \"\u062f\u0631\u06af\u06cc\u0631\u06cc\", \"\u062a\u0646\u0634\", \"\u0627\u062e\u0637\u0627\u0631\", \"\u062d\u0627\u0644\u062a \u062c\u0646\u06af\"\n- Casualty reports from military actions\n- Border clashes, territorial disputes turning violent\n\n**Actions:**\n1. Fetch each channel's recent posts (last ~20 messages) via t.me/channelname web interface using Playwright\n2. Extract message text, timestamps, and any media captions\n3. Filter for SERIOUS conflict/war keywords (not routine political news)\n4. Cross-reference: if multiple channels report same event \u2192 higher confidence\n5. If SERIOUS alert detected \u2192 Send Telegram alert with:\n   - Channel(s) reporting\n   - Key message excerpt (translated/summarized)\n   - Time of post\n   - Direct link to t.me/channelname/message_id\n   - Assessment: \"Iran-direct\" / \"Regional escalation\" / \"Proxy conflict\"\n6. Save last checked message IDs to /data/.hermes/telegram_alert_state.json to avoid duplicate alerts\n7. Silent if no serious alerts (no message on normal runs)\n\n**Language:** Persian\n**Tools:** Playwright (web), file (JSON storage)\n**Priority:** HIGH - only alert on genuine military escalation, not political rhetoric",
+      "skills": [
+        "price-search"
+      ],
+      "skill": "price-search",
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "openai-api",
+      "model_snapshot": "mimohermes",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 180,
+        "display": "every 180m"
+      },
+      "schedule_display": "every 180m",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-26T23:00:09.860061+00:00",
+      "next_run_at": "2026-07-27T02:00:09.870128+00:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "7148403012",
+        "chat_name": "Nima",
+        "thread_id": null,
+        "user_id": "7148403012"
+      },
+      "enabled_toolsets": [
+        "web",
+        "terminal",
+        "file"
+      ],
+      "workdir": null
     }
   ],
-  "updated_at": "2026-07-26T21:23:38.608989+00:00"
+  "updated_at": "2026-07-26T23:04:56.188464+00:00"
 }

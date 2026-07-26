@@ -1,34 +1,46 @@
 # Price Search — Reference Notes
 
 ## Script Location
-`/data/.hermes/scripts/price_search.py`
+## Session Notes — 2026-07-26 (Mordad 5, 1405)
 
-## Playwright Setup on This System
+### Car Search Issues
+- **Divar Playwright timeout**: `page.goto('https://divar.ir/s/tehran/car/pride')` took 60s+ and often timed out. The page is 800KB+ with heavy JS.
+- **Bama Playwright timeout**: Same issue — no direct search URL, requires search input interaction.
+- **Workaround**: Use **Divar API** (`https://api.divar.ir/v8/web-search/tehran/car?...`) or **simple curl + regex** on the HTML. The `kt-post-card__title` and `kt-post-card__description` selectors work for Divar listings.
+- **Basalam API** for cars: Returns mostly parts/accessories, not full vehicles. Label clearly.
 
-```bash
-# Install
-pip install playwright
-PLAYWRIGHT_BROWSERS_PATH=/tmp/pw-browsers playwright install chromium
-PLAYWRIGHT_BROWSERS_PATH=/tmp/pw-browsers playwright install-deps chromium
+### Financial Market Prices — **Critical Accuracy Issues Found**
+1. **Date error**: I reported prices as "Mordad 1403" instead of **"Mordad 5, 1405"** (today). User corrected me — **ALWAYS verify date from source**.
+2. **Stale prices from mesghal.com**: The page showed "Monday 5 Mordad 1405" but prices didn't match tgju.org real-time data. User shared tgju.org Google links with correct prices.
+3. **tgju.org is the GOLD STANDARD for Iranian live prices**:
+   - `https://www.tgju.org/profile/geram18` — 18k gold per gram (real-time)
+   - `https://www.tgju.org/profile/price_dollar_rl` — USD free market (RIAL)
+   - `https://www.tgju.org/profile/price_usdt_rl` — USDT/IRR (RIAL)
+   - `https://www.tgju.org/profile/emami1` — Emami coin
+   - `https://www.tgju.org/profile/bahar_azadi` — Bahar Azadi coin
+   - Prices update live, no Playwright needed (simple curl works)
 
-# System deps that were missing initially:
-# libglib-2.0.so.0 and other GTK/GLib libraries
-# Fixed by: playwright install-deps chromium
-```
+3. **Currency unit confusion — REPEATED MISTAKE**: 
+   - tgju.org prices are in **RIAL** (e.g., 1,787,890 Rial = 178,789 Toman)
+   - mesghal.com prices are in **TOMAN** 
+   - bonbast.com prices are in **TOMAN**
+   - bestchange.com prices are in **RIAL**
+   - **ALWAYS convert to Toman for display** (÷10 for Rial) and **explicitly state the unit**.
 
-**Why /tmp?** The `/data` partition is 434MB. Chromium alone is ~300MB. `/tmp` lives on the root overlay with 1.8TB free.
+### Price Search Script Performance
+- Original script timed out at 180-300s.
+- **Fixes needed in price_search.py**:
+  - Use `domcontentloaded` not `networkidle`
+  - 30s max page timeout
+  - Parallel search with `asyncio.gather()`
+  - Block images/CSS to speed up
+  - Basalam API (no browser) for marketplace items
+  - For car sites: try API first, then simple curl+regex, skip Playwright if >10s
 
-## User Preferences (Nima)
-
-1. **Language**: Persian (Farsi) — always respond in Persian
-2. **Price is #1**: Getting the best deal is the top priority
-3. **Never limit to one site**: Search ALL sites in the category
-4. **Category-first**: Don't search car sites for computer parts
-5. **Always provide links**: User wants clickable URLs to products
-6. **Compare prices**: Show min/avg/max and recommend best value
-7. **No time wasting**: User gets frustrated by irrelevant searches
-
-## Site-Specific Notes
+### Minimum 10 Sites Enforcement
+- The script MUST attempt 10+ sites per query
+- If a site fails/times out: log it, move to next, report failures to user
+- Don't stop early — user explicitly listed 10 required sites
 
 ### Digikala (digikala.com)
 - Search URL: `https://www.digikala.com/search/?q={query}`
