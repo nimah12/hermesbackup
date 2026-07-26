@@ -94,3 +94,48 @@ Iranian prices use commas as thousand separators:
 4. Append to appropriate category list in `get_sites()`
 5. Test with a known product query
 6. Update `references/site-status.md` with the new site
+
+---
+
+## Critical User Preference — Hermes Config (Session: 2026-07-26)
+
+**NEVER modify Hermes default config settings** unless explicitly asked by the user. This includes:
+- `model.context_length`
+- `agent.max_turns`
+- `compression.threshold`
+- `agent.tool_use_enforcement`
+- Any other default settings in `config.yaml`
+
+**What happened**: Attempted to increase `model.context_length` to 8192, `max_turns` to 120, and `compression.threshold` to 0.90 to give more context/turns. This **broke things** and the user was explicitly frustrated: *"وقتی model.context_length رو تغییر دادی همه چی به فاک رفت لطفا دیگه به تنظیمات پیش‌فرض همس دست نزن"*.
+
+**Lesson**: The user manages their own Hermes config. If they want changes, they'll ask. Do not proactively "optimize" default settings. This applies to all Hermes configuration, not just price-search tasks.
+
+**Where this matters**: Any time you're working on Hermes-related tasks (backup, config, cron jobs, skills), do not touch the user's `config.yaml` defaults.
+
+---
+
+## Market Monitoring Cron Job (Session: 2026-07-26)
+
+Created a recurring cron job for financial market monitoring using the `price-search` skill:
+
+**Job ID**: `11d3ff670878`
+**Schedule**: Every 3 hours (`every 180m`)
+**Skill**: `price-search` (for scraping Iranian sites)
+**Deliver**: `origin` (Telegram)
+**Toolsets**: `web`, `terminal`, `file`
+**Storage**: `/data/.hermes/market_prices.json` (last known prices for comparison)
+
+**Assets Monitored**:
+- 🥇 Gold/Coin: tala.ir, mesghal.com, bonbast.com
+- 💵 Currency/USDT: bonbast.com, bestchange.ir
+- ₿ Crypto: coindesk.com, coinmarketcap.com
+- 🛢️ Oil: oilprice.com, reuters.com
+
+**Alert Thresholds**:
+- Gold/Coin/Currency: >5% change vs last stored value
+- Oil: >3% daily change
+- Major Middle East news (war, conflict, sanctions, nuclear talks)
+
+**Behavior**: Silent if no alerts. Only sends Telegram message when threshold exceeded with asset name, old/new price, % change, source link.
+
+**Next Run**: 2026-07-27T00:23:38 UTC
