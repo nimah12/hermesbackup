@@ -6,7 +6,7 @@ compression:
   enabled: true
   threshold: 0.90
 model:
-  context_length: 8192
+  context_length: 64000
 agent:
   max_turns: 120
   tool_use_enforcement: true
