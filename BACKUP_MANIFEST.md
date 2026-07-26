@@ -1,5 +1,5 @@
 # Hermes Backup
-## Timestamp: 2026-07-26_16-04-48
+## Timestamp: 2026-07-26_16-06-03
 
 ### Contents:
 - memories/ : User profile and personal notes
@@ -9,6 +9,8 @@
 - sessions/ : Session database
 - kanban.db : Kanban database
 - cron/ : Cron execution data
-- state.db : State database
 - channel_directory.json : Channel mappings
 - gateway_state.json : Gateway state
+
+### Excluded:
+- state.db : Contains sensitive tokens
