@@ -134,7 +134,58 @@
       },
       "enabled_toolsets": null,
       "workdir": null
+    },
+    {
+      "id": "11d3ff670878",
+      "name": "Market Price Monitoring",
+      "prompt": "Market price monitoring job. Run every 3 hours. Check prices from:\n- Gold/Coin: tala.ir, mesghal.com, bonbast.com\n- Currency/USDT: bonbast.com, bestchange.ir\n- Crypto: coindesk.com, coinmarketcap.com\n- Oil: oilprice.com, reuters.com\n\nAlert conditions:\n1. Gold/Coin/Currency: >5% change vs last stored value\n2. Major Middle East news: war, conflict, sanctions, nuclear talks\n3. Oil: >3% daily change\n\nActions: scrape prices, compare with /data/.hermes/market_prices.json, send Telegram alert only if threshold exceeded with asset name, old/new price, % change, source link. Save new prices to JSON. Silent if no alerts. Response in Persian.",
+      "skills": [
+        "price-search"
+      ],
+      "skill": "price-search",
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "openai-api",
+      "model_snapshot": "mimohermes",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 180,
+        "display": "every 180m"
+      },
+      "schedule_display": "every 180m",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-26T21:23:38.604814+00:00",
+      "next_run_at": "2026-07-27T00:23:38.608542+00:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "7148403012",
+        "chat_name": "Nima",
+        "thread_id": null,
+        "user_id": "7148403012"
+      },
+      "enabled_toolsets": [
+        "web",
+        "terminal",
+        "file"
+      ],
+      "workdir": null
     }
   ],
-  "updated_at": "2026-07-26T19:19:58.037048+00:00"
+  "updated_at": "2026-07-26T21:23:38.608989+00:00"
 }

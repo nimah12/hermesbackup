@@ -25,11 +25,4 @@ Full site categorization for price search:
 ₿ CRYPTO: coindesk.com, coinmarketcap.com
 🛢️ OIL: oilprice.com, reuters.com
 §
-MARKET MONITORING (must alert user):
-- Gold/Coin prices: tala.ir, mesghal.com, bonbast.com
-- Currency rates: bonbast.com, bestchange.ir
-- Cryptocurrency: coindesk.com, coinmarketcap.com
-- Oil prices: oilprice.com, reuters.com
-Alert user when: 1) Sudden price changes >5% in gold/coin/currency, 2) Major Middle East news (war, conflict), 3) Significant oil price movements. Use cron job for monitoring.
-§
-ALWAYS include direct product links when reporting prices. After showing prices, add clickable links for each result so user can directly visit the product page.
+NEVER modify Hermes default config settings (model.context_length, agent.max_turns, compression.threshold, etc.) unless explicitly asked. Changing model.context_length broke things previously. User explicitly forbids touching default settings.
