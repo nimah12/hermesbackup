@@ -89,7 +89,52 @@
       },
       "enabled_toolsets": null,
       "workdir": null
+    },
+    {
+      "id": "b958db049423",
+      "name": "Daily Self-Improvement - Price Search",
+      "prompt": "You are a self-improvement agent. Your job is to improve the price search capability. Do the following:\n1. Read the current price_search.py script at /data/.hermes/scripts/price_search.py\n2. Test it with a sample query (like \"iPhone 15\")\n3. Identify what sites are blocked or not working\n4. Research new bypass methods (different user agents, mobile versions, API endpoints, proxy services)\n5. Add at least 2 new sites or bypass methods to the script\n6. Test the improved script\n7. Report what you improved\n\nFocus on:\n- Finding new Iranian e-commerce sites\n- Better bypass methods for blocked sites\n- More accurate price extraction\n- Direct product link generation\n- Currency unit detection (Toman vs Rial)\n\nSave improvements to /data/.hermes/scripts/price_search.py",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "openrouter",
+      "model_snapshot": null,
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 1440,
+        "display": "every 1440m"
+      },
+      "schedule_display": "every 1440m",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-26T19:19:58.031154+00:00",
+      "next_run_at": "2026-07-27T19:19:58.036585+00:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "7148403012",
+        "chat_name": "Nima",
+        "thread_id": null,
+        "user_id": "7148403012"
+      },
+      "enabled_toolsets": null,
+      "workdir": null
     }
   ],
-  "updated_at": "2026-07-26T18:39:23.118610+00:00"
+  "updated_at": "2026-07-26T19:19:58.037048+00:00"
 }

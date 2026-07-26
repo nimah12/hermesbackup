@@ -1,4 +1,4 @@
-PRICE SEARCH RULES: 1) Search ALL relevant sites per category. 2) Compare min/avg/max prices. 3) Check condition, warranty, seller reliability. 4) Give personal recommendations. 5) Price is top priority. CURRENCY: 1 Toman = 10 Rial. Most shops use Toman. NEVER mix Toman/Rial. Always verify unit before reporting.
+PRICE SEARCH: Always include direct links. Search ALL sites (digikala, basalam, sheypoor, divar, bama, emalls, torob, snapp, parsiancomputer, zoomit, sodamarket, technolife, digistyle, khodro45, khodrobank, hamrah-mechanic). Try multiple bypass methods for blocked sites. Don't worry about tokens. CURRENCY: 1 Toman = 10 Rial. Most shops use Toman. NEVER mix units. Detect category FIRST then search relevant sites only.
 §
 Site categorization - DO NOT mix categories:
 - COMPUTER PARTS: digikala, basalam, sheypoor, sodamarket, technolife, digistyle, torob (NOT car sites)
