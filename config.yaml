@@ -1,10 +1,15 @@
 terminal:
   backend: local
   cwd: /data/workspace
-  timeout: 180
+  timeout: 300
 compression:
   enabled: true
-  threshold: 0.85
+  threshold: 0.90
+model:
+  context_length: 8192
+agent:
+  max_turns: 120
+  tool_use_enforcement: true
 onboarding:
   seen:
     profile_build_offered: true
