@@ -51,6 +51,54 @@ PLAYWRIGHT_BROWSERS_PATH=/tmp/pw-browsers python3 /data/.hermes/scripts/price_se
 
 Output: JSON with `category` (car/motorcycle/general), `query`, and `results` sorted by price.
 
+## Optimizations Learned (Session Notes)
+
+### Performance Fixes for Playwright Script
+- **Timeout issues**: The original script timed out at 180-300s. Fixes applied:
+  - Use `wait_until="domcontentloaded"` instead of `"networkidle"` (much faster)
+  - Set page timeout to 30s max, not 60s+
+  - Add `ignore_https_errors=True` to browser context
+  - Disable images: `context = await browser.new_context(ignore_https_errors=True)` then block image loading via route
+- **Parallelize**: Search multiple sites concurrently using `asyncio.gather()` — don't wait for each sequentially
+- **Basalam API**: Use direct API (no browser needed) — 10x faster, no timeouts
+- **Divar**: New class-based selectors (`kt-post-card__title`, `kt-post-card__description`) work reliably
+- **Bama/Khodro45**: These block cloud IPs. Use API endpoints if available, else skip gracefully
+
+### Category-First Search Pattern (MANDATORY)
+```python
+# 1. DETECT category from query
+category = detect_category(query)  # car / motorcycle / general
+
+# 2. SELECT sites for that category ONLY
+sites = CATEGORY_SITES[category]  # Never mix categories
+
+# 3. SEARCH all sites in parallel
+results = await asyncio.gather(*[search_site(site, query) for site in sites])
+
+# 4. FILTER: keep only valid results (price > 0, has link)
+# 5. SORT by price, show min/avg/max, recommend best value
+```
+
+### Currency Detection — Hard Rules
+- **Basalam API**: Always Toman (explicit in docs)
+- **Divar**: Always shows "تومان" explicitly
+- **Sheypoor**: NO unit shown — MUST check product page or flag uncertainty
+- **Digikala**: NO unit shown — assume Toman (modern Iranian e-commerce standard)
+- **Default**: If no unit visible, assume Toman but FLAG: "⚠️ واحد پول نمایش داده نشده — احتمالاً تومان"
+
+### Minimum 10 Sites Enforcement
+The script MUST attempt at least 10 sites per query. If a site fails/times out:
+1. Log the failure
+2. Move to next site immediately
+3. Continue until 10+ successful results or all sites exhausted
+4. Report which sites failed to the user
+
+### Car/Motorcycle Specific
+- **Divar**: Use city-specific URLs: `https://divar.ir/s/tehran/car` or `.../motorcycle`
+- **Bama**: Requires search input interaction — no direct URL. Try API first.
+- **Khodro45**: Try `https://khodro45.com/car/{brand}/{model}` pattern
+- **Basalam**: Returns parts/accessories mostly, not full vehicles — label clearly
+
 ## Category Detection
 
 The script auto-detects query category and selects appropriate sites:
