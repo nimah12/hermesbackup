@@ -44,7 +44,52 @@
       },
       "enabled_toolsets": null,
       "workdir": null
+    },
+    {
+      "id": "9164df07a972",
+      "name": "Market Monitor - Gold/Coin/Oil/News",
+      "prompt": "You are an Iranian market monitor. Your job:\n1. Check gold and coin prices from tala.ir and mesghal.com\n2. Check dollar and currency rates from bonbast.com\n3. Check oil prices from oilprice.com\n4. Check important Middle East news (war, tension, sanctions) from Reuters and BBC Farsi\nIf there is significant fluctuation (more than 5%) or important news, alert the user.\nIf nothing special, just give a brief market summary.\nRespond in Persian/Farsi.",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "openrouter",
+      "model_snapshot": null,
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 240,
+        "display": "every 240m"
+      },
+      "schedule_display": "every 240m",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-26T18:39:23.114707+00:00",
+      "next_run_at": "2026-07-26T22:39:23.118276+00:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "7148403012",
+        "chat_name": "Nima",
+        "thread_id": null,
+        "user_id": "7148403012"
+      },
+      "enabled_toolsets": null,
+      "workdir": null
     }
   ],
-  "updated_at": "2026-07-26T16:05:56.986373+00:00"
+  "updated_at": "2026-07-26T18:39:23.118610+00:00"
 }

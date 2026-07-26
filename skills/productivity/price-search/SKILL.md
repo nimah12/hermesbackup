@@ -20,12 +20,15 @@ Uses Playwright for browser-based sites + direct API for Basalam.
 
 The user (Nima) has explicitly requested these rules. Follow ALL of them every time:
 
-1. **NEVER limit to one site** — Search ALL available sites, not just the first result. Present results from every site that returns data.
-2. **Always compare prices** — Show: lowest price, average price, highest price. Make the comparison visual.
-3. **Evaluate quality & trust** — For each result, note: product condition (new/used/stock), warranty status, seller reliability/reputation.
-4. **Give personal recommendations** — Always end with YOUR recommendation: which option offers the best value, considering price + quality + trust. Don't just list — advise.
-5. **Price is #1 priority** — The user cares most about getting the best deal. Always highlight the cheapest viable option.
-6. **Don't stop at one search** — If the first query doesn't find enough results, try alternative search terms (e.g., "i5-4570" vs "اینتل 4570" vs "پردازنده 4570").
+1. **NEVER limit to one site** — Search ALL available sites in the correct category, not just the first result. Present results from every site that returns data. The user was VERY frustrated when I kept showing only Basalam results.
+2. **CATEGORY-FIRST approach** — Detect the product category FIRST, then ONLY search sites in that category. Never search car sites for computer parts or vice versa. See "Site Categorization" below.
+3. **Always compare prices** — Show: lowest price, average price, highest price. Make the comparison visual.
+4. **Evaluate quality & trust** — For each result, note: product condition (new/used/stock), warranty status, seller reliability/reputation.
+5. **Give personal recommendations** — Always end with YOUR recommendation: which option offers the best value, considering price + quality + trust. Don't just list — advise.
+6. **Price is #1 priority** — The user cares most about getting the best deal. Always highlight the cheapest viable option.
+7. **Always provide links** — The user wants clickable links to the products/pages found. Include URLs in results.
+8. **Don't stop at one search** — If the first query doesn't find enough results, try alternative search terms (e.g., "i5-4570" vs "اینتل 4570" vs "پردازنده 4570").
+9. **Language** — User prefers Persian (Farsi). Respond in Persian.
 
 ## Setup (one-time)
 
@@ -51,6 +54,33 @@ The script auto-detects query category and selects appropriate sites:
 - **car** keywords: پراید, پژو, سمند, تیبا, 206, 405, خودرو, etc.
 - **motorcycle** keywords: موتور, هوندا, یاماها, CG125, ویو, etc.
 - **general** (default): everything else
+
+## Site Categorization (CRITICAL)
+
+The user explicitly asked: "وقتی بهت میگم برو قیمت قطعات کامپیوتر دربیار دیگه تو سایت خودرو یا سایتایی که ربطی ندارن دنبال قیمت نگرد"
+
+**Detect category FIRST, then search ONLY relevant sites:**
+
+| Category | Sites to Search | DO NOT Search |
+|----------|----------------|---------------|
+| 🖥️ Computer/Laptop | digikala, basalam, sheypoor, sodamarket, technolife, digistyle, torob | car sites |
+| 🚗 Cars | divar, bama, khodrobank, hamrah-mechanic, khodro45 | shop sites |
+| 🏍️ Motorcycles | divar, bama, khodro45 | shop sites |
+| 📱 Mobile/Tablet | digikala, basalam, mobile.ir | car sites |
+| 👗 Fashion | modiseh, digistyle | car sites |
+| 🏠 Home/Kitchen | digikala, basalam | car sites |
+| 💄 Cosmetics | digikala, basalam | car sites |
+| 📚 Books | digikala, nashr.com | car sites |
+| 🔧 Tools/Industrial | digikala, bazargan.com | car sites |
+| 🚗 Auto Parts | khodro45, basalam, sheypoor | shop sites |
+| 🎮 Gaming | digikala, basalam | car sites |
+
+**Auto-detect keywords:**
+- car: پراید, پژو, سمند, تیبا, 206, 405, خودرو, BMW, etc.
+- motorcycle: موتور, هوندا, یاماها, CG125, ویو, etc.
+- computer: کارت گرافیک, مادربرد, پردازنده, RAM, SSD, CPU, GPU, etc.
+- mobile: گوشی, آیفون, سامسونگ, etc.
+- general: everything else → search ALL e-commerce sites
 
 ## Supported Sites
 
@@ -106,6 +136,9 @@ PERSIAN_DIGITS = str.maketrans('۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', '0123
 
 ## Pitfalls
 
+- **USER FRUSTRATION: Limiting to one site** — I once showed only Basalam results. The user was VERY frustrated. ALWAYS search ALL sites in the category and present comprehensive results.
+- **USER FRUSTRATION: Searching wrong categories** — I once searched car sites for computer parts. The user said "وقتمو تلف نکن". ALWAYS detect category first.
+- **USER FRUSTRATION: Not providing links** — The user wants clickable links to products. Always include URLs.
 - **Torob CAPTCHA/timeout**: From certain IPs (cloud servers), Torob blocks completely. Report as غیردسترس.
 - **digikala timeouts**: Use `wait_until="domcontentloaded"` not `"networkidle"`.
 - **Divar car URL**: Must use `https://divar.ir/s/tehran/car` (city-specific).

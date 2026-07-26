@@ -19,6 +19,15 @@ Full site categorization for price search:
 🔧 TOOLS/INDUSTRIAL: digikala, bazargan.com
 🍽️ FOOD/GROCERY: snappmarket, filfil
 🚗 AUTO PARTS: khodro45, basalam, sheypoor
-🎭 ENTERTAINMENT: digikala, basalam
 🎮 GAMING: digikala, basalam
-💡 USER PREFERENCES: Persian language, price is top priority, give personal recommendations, don't limit to one site, compare min/avg/max prices
+💎 GOLD/COIN: tala.ir, mesghal.com, bonbast.com
+💵 CURRENCY: bonbast.com, bestchange.ir
+₿ CRYPTO: coindesk.com, coinmarketcap.com
+🛢️ OIL: oilprice.com, reuters.com
+§
+MARKET MONITORING (must alert user):
+- Gold/Coin prices: tala.ir, mesghal.com, bonbast.com
+- Currency rates: bonbast.com, bestchange.ir
+- Cryptocurrency: coindesk.com, coinmarketcap.com
+- Oil prices: oilprice.com, reuters.com
+Alert user when: 1) Sudden price changes >5% in gold/coin/currency, 2) Major Middle East news (war, conflict), 3) Significant oil price movements. Use cron job for monitoring.
