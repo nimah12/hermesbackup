@@ -154,4 +154,16 @@ output: "/data/.hermes/current_date.json"
 
 ---
 
+## Support Files
+
+| File | Purpose |
+|------|---------|
+| `scripts/market_monitor.py` | Main 3-hour market monitor (IranJib + Tala.ir + CoinGecko) |
+| `scripts/gold_alert_telegram.py` | 30-min Telegram channel monitor (@se_pz, @talasea_ir) |
+| `scripts/tehran_time_sync.py` | 5-min time sync from Worldometer |
+| `references/iranjib_id_mapping.md` | Complete IranJib HTML ID to price key mapping |
+| `references/telegram_channel_patterns.md` | Telegram channel parsing patterns and price ranges |
+
+---
+
 **Key Lesson**: Cron jobs that scrape data should be pure Python scripts with `no_agent=true`. LLM agents add latency and failure modes unsuitable for scheduled tasks.

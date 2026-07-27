@@ -205,16 +205,16 @@ PERSIAN_DIGITS = str.maketrans('۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', '0123
 - **CRITICAL: Currency unit confusion** — I repeatedly wrote Rial prices as Toman. The user was EXTREMELY frustrated (used angry emojis). 1 Toman = 10 Rial. Most Iranian sites use Toman, BUT some (especially Sheypoor, older classifieds) may use Rial without showing the unit. ALWAYS verify the unit before reporting. If uncertain, check the product page directly. Default to Toman but FLAG uncertainty.
 - **CRITICAL: Never modify Hermes default config** — User explicitly forbids touching `model.context_length`, `agent.max_turns`, `compression.threshold`, etc. Changing `model.context_length` broke things previously. Only modify config when explicitly asked.
 - **CRITICAL: Always verify current date before reporting prices** — I reported "1403" instead of actual "1405". ALWAYS check system date or page timestamp before writing any date in responses.
+### Pitfalls
+
+- **CRITICAL: Currency unit confusion** — I repeatedly wrote Rial prices as Toman. The user was EXTREMELY frustrated (used angry emojis). 1 Toman = 10 Rial. Most Iranian sites use Toman, BUT some (especially Sheypoor, older classifieds) may use Rial without showing the unit. ALWAYS verify the unit before reporting. If uncertain, check the product page directly. Default to Toman but FLAG uncertainty.
+- **CRITICAL: Never modify Hermes default config** — User explicitly forbids touching `model.context_length`, `agent.max_turns`, `compression.threshold`, etc. Changing `model.context_length` broke things previously. Only modify config when explicitly asked.
+- **CRITICAL: Always verify current date before reporting prices** — I reported "1403" instead of actual "1405". ALWAYS check system date or page timestamp before writing any date in responses.
 - **CRITICAL: Use tgju.org as PRIMARY source for live market prices** — mesghal.com shows daily snapshots (may be stale). tgju.org updates in real-time (seconds). For market monitoring cron, use tgju.org profiles via curl (no JS needed).
-- **CRITICAL: Minimum 10 sites per product search** — User explicitly listed required sites. If one site fails, move to next immediately. Don't stop early. Report which sites failed.
+- **CRITICAL: Minimum 10 sites per product search** — User explicitly listed required sites. If one site fails/times out, move to next immediately. Don't stop early. Report which sites failed.
 - **USER FRUSTRATION: Only showing Basalam results** — Search ALL sites in category, present results from EVERY site that returns data.
 - **USER FRUSTRATION: Wrong category searches** — Detect category FIRST, then ONLY search relevant sites.
-- **USER FRUSTRATION: No clickable links** — Always include direct URLs to products/pages.
-- **CRITICAL: Not searching enough sites** — User explicitly listed required sites: Digikala, Emalls, Sheypoor, Divar, Snapp, Tapsi, Torob, eSAm, Computer Parsian, Zoomit. The user said "وقتی بهت میگم ده تا سایت یعنی دیجیکالا ایمالز شیپور دیوار اسنپ تپسی ترب esam کامپیوتر پارسیان زومیت". ALWAYS search at least 10 sites per product. If one site blocks you, move to the next — don't stop.
-- **USER FRUSTRATION: Limiting to one site** — I once showed only Basalam results. The user was VERY frustrated. ALWAYS search ALL sites in the category and present comprehensive results from EVERY site that works.
-- **USER FRUSTRATION: Searching wrong categories** — I once searched car sites for computer parts. The user said "وقتمو تلف نکن". ALWAYS detect category first.
-- **Digistyle removed from electronics/mobile** — Digistyle is fashion/beauty only. Never search it for phones, laptops, computer parts. Only use for clothing/cosmetics queries.
-- **USER FRUSTRATION: Not providing links** — The user wants clickable links to products. Always include URLs.
+- **USER FRUSTRATION: No clickable links** — The user wants clickable links to products. Always include URLs.
 - **CRITICAL: Wrong dates in price reports** — Session 2026-07-26: I reported mesghal.com data as "5 Mordad 1403" when it was actually 1405. The user was furious (😡😡😡). ALWAYS verify the date on the source page before reporting. Use tgju.org which shows correct Jalali dates.
 - **CRITICAL: Wrong price source** — mesghal.com showed stale/old prices (14,800,000 Rial = 1,480,000 Toman for 18k gold) while tala.ir showed correct 17,878,900 Toman. Cross-reference multiple sources. tgju.org and tala.ir are more reliable for gold/currency.
 - **CRITICAL: Date verification** — Before reporting ANY price, check the page's displayed date. The share link https://share.google/5PuM49weUHtgTI3u6 showed "آخرین به روز رسانی در تاریخ دوشنبه، ۵ مرداد ۱۴۰۵" — always include this in reports.
@@ -232,6 +232,29 @@ PERSIAN_DIGITS = str.maketrans('۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', '0123
 - **Persian numerals**: All Iranian sites use فارسی digits. Always convert before price parsing.
 - **Currency detection**: Check each price line for "تومان" or "ریال". Default assumption is Toman. Convert Rial to Toman (÷10) for display.
 - **Market monitoring**: A cron job runs every 4 hours checking gold, coin, USD, oil prices and Middle East news. Alert user if >5% fluctuation or major news event.
+
+### Performance Optimizations (Session 2026-07-27)
+
+- **Playwright timeout issues**: Original script timed out at 180-300s. Fixes applied:
+  - Use `wait_until="domcontentloaded"` instead of `"networkidle"` (much faster)
+  - Set page timeout to 30s max, not 60s+
+  - Add `ignore_https_errors=True` to browser context
+  - Disable images: block image loading via route interception
+- **Parallelize**: Search multiple sites concurrently using `asyncio.gather()` — don't wait for each sequentially
+- **Basalam API**: Use direct API (no browser needed) — 10x faster, no timeouts
+  - Endpoint: `https://services.basalam.com/web/v1/search/product/search?from=0&q=<encoded>&size=10`
+  - Headers: `Origin: https://basalam.com`, `Referer: https://basalam.com/`
+- **Divar selectors**: New class-based selectors work reliably: `kt-post-card__title`, `kt-post-card__description`
+- **Bama/Khodro45**: These block cloud IPs. Try API endpoints if available, else skip gracefully
+- **Cron job reliability**: Convert failing LLM+Playwright crons to direct Python scripts (`no_agent=true`) for reliability
+
+### Key Technical Patterns (Session 2026-07-27)
+
+- **IranJib price extraction**: Use specific HTML IDs (`f_83_63_pr`, `f_84_63_pr`, `f_85_63_pr`, `f_127_63_pr`, `f_87_63_pr`, `f_89_63_pr`, `f_90_63_pr`, `f_92_63_pr`, `f_19054_127_pr`, `f_6370_127_pr`, `f_8652_68_pr`, `f_8653_68_pr`, `f_17624_68_pr`, `f_8277_127_pr`, `f_6371_127_pr`, `f_6372_127_pr`) — prices are in Rial, divide by 10 for Toman
+- **Tala.ir API**: `https://www.tala.ir/api/v1/live-price` returns structured JSON with gold/coin prices
+- **CoinGecko API**: Free crypto prices — `https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether,binancecoin,solana,ripple&vs_currencies=usd&include_24hr_change=true`
+- **Telegram channel monitoring**: Use `t.me/s/<channel>` for public channel scraping (no auth needed)
+- **Worldometer for Tehran time**: `https://www.worldometers.info/time/tehran-iran/` — extract from `serverTime` prop in live clock component
 
 ## Reference Files
 
