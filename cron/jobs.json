@@ -29,7 +29,7 @@
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T16:05:56.985865+00:00",
-      "next_run_at": "2026-07-27T16:06:17.768075+00:00",
+      "next_run_at": "2026-07-28T04:06:26.147691+00:00",
       "last_run_at": "2026-07-27T04:06:17.768075+00:00",
       "last_status": "ok",
       "last_error": null,
@@ -68,17 +68,17 @@
       "schedule_display": "every 240m",
       "repeat": {
         "times": null,
-        "completed": 3
+        "completed": 5
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T18:39:23.114707+00:00",
-      "next_run_at": "2026-07-27T10:40:18.090548+00:00",
-      "last_run_at": "2026-07-27T06:40:18.090548+00:00",
-      "last_status": "error",
-      "last_error": "RuntimeError: Skipped to prevent unintended spend: global inference config drifted since this job was created (provider 'openrouter' -> 'openai-api'), and this job is unpinned. No inference call was made. To run on the new config, pin it explicitly: `cronjob action=update job_id=9164df07a972 provider=<provider> model=<model>` (or pin the original values to keep them). See #44585.",
+      "next_run_at": "2026-07-27T18:40:27.337227+00:00",
+      "last_run_at": "2026-07-27T14:40:27.337227+00:00",
+      "last_status": "ok",
+      "last_error": null,
       "last_delivery_error": null,
       "deliver": "origin",
       "origin": {
@@ -159,17 +159,17 @@
       "schedule_display": "every 180m",
       "repeat": {
         "times": null,
-        "completed": 2
+        "completed": 4
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T21:23:38.604814+00:00",
-      "next_run_at": "2026-07-27T10:06:04.598866+00:00",
-      "last_run_at": "2026-07-27T07:02:49.640214+00:00",
-      "last_status": "error",
-      "last_error": "RuntimeError: HTTP 502: [502]: fetch connect timeout",
+      "next_run_at": "2026-07-27T19:06:26.159319+00:00",
+      "last_run_at": "2026-07-27T13:06:25.632866+00:00",
+      "last_status": "ok",
+      "last_error": null,
       "last_delivery_error": null,
       "deliver": "origin",
       "origin": {
@@ -208,15 +208,15 @@
       "schedule_display": "every 30m",
       "repeat": {
         "times": null,
-        "completed": 13
+        "completed": 29
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T22:48:56.845343+00:00",
-      "next_run_at": "2026-07-27T08:07:20.075828+00:00",
-      "last_run_at": "2026-07-27T07:37:20.075828+00:00",
+      "next_run_at": "2026-07-27T16:23:28.061209+00:00",
+      "last_run_at": "2026-07-27T15:53:28.061209+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -238,18 +238,16 @@
     {
       "id": "3eaeabca4dae",
       "name": "Middle East War/Conflict Alert - Telegram Channels",
-      "prompt": "Telegram channel monitoring for Middle East war/conflict alerts. Run every 3 hours.\n\n**Telegram Channels to Monitor (via t.me web interface):**\n1. @iranintltv \u2192 https://t.me/iranintltv\n2. @km_ap \u2192 https://t.me/km_ap\n3. @ne_wg \u2192 https://t.me/ne_wg\n4. @tasnimnews \u2192 https://t.me/tasnimnews\n5. @tabzlive \u2192 https://t.me/tabzlive\n6. @alibk3 \u2192 https://t.me/alibk3\n7. @farsna \u2192 https://t.me/farsna\n8. @khabari_18 \u2192 https://t.me/khabari_18\n\n**What to Look For (Serious Alert Triggers):**\n- Missile strikes / rocket attacks / drone attacks on any Middle East location\n- Military engagement / direct conflict between nations\n- Iran-specific: attacks on Iran, Iran's military actions, nuclear facility incidents\n- Israel-Iran tensions, proxy conflicts (Hezbollah, Houthis, etc.)\n- US military movements in region, carrier strike groups\n- Official war declarations, emergency alerts, air raid sirens\n- Major escalation language: \"\u062c\u0646\u06af\", \"\u0645\u0648\u0634\u06a9\", \"\u062d\u0645\u0644\u0647\", \"\u062f\u0631\u06af\u06cc\u0631\u06cc\", \"\u062a\u0646\u0634\", \"\u0627\u062e\u0637\u0627\u0631\", \"\u062d\u0627\u0644\u062a \u062c\u0646\u06af\"\n- Casualty reports from military actions\n- Border clashes, territorial disputes turning violent\n\n**Actions:**\n1. Fetch each channel's recent posts (last ~20 messages) via t.me/channelname web interface using Playwright\n2. Extract message text, timestamps, and any media captions\n3. Filter for SERIOUS conflict/war keywords (not routine political news)\n4. Cross-reference: if multiple channels report same event \u2192 higher confidence\n5. If SERIOUS alert detected \u2192 Send Telegram alert with:\n   - Channel(s) reporting\n   - Key message excerpt (translated/summarized)\n   - Time of post\n   - Direct link to t.me/channelname/message_id\n   - Assessment: \"Iran-direct\" / \"Regional escalation\" / \"Proxy conflict\"\n6. Save last checked message IDs to /data/.hermes/telegram_alert_state.json to avoid duplicate alerts\n7. Silent if no serious alerts (no message on normal runs)\n\n**Language:** Persian\n**Tools:** Playwright (web), file (JSON storage)\n**Priority:** HIGH - only alert on genuine military escalation, not political rhetoric",
-      "skills": [
-        "price-search"
-      ],
-      "skill": "price-search",
+      "prompt": "Middle East War Intelligence - runs every 3 hours via direct Python script",
+      "skills": [],
+      "skill": null,
       "model": null,
       "provider": null,
-      "provider_snapshot": "openai-api",
-      "model_snapshot": "mimohermes",
+      "provider_snapshot": null,
+      "model_snapshot": null,
       "base_url": null,
-      "script": null,
-      "no_agent": false,
+      "script": "war_intel_monitor.py",
+      "no_agent": true,
       "context_from": null,
       "schedule": {
         "kind": "interval",
@@ -259,15 +257,15 @@
       "schedule_display": "every 180m",
       "repeat": {
         "times": null,
-        "completed": 2
+        "completed": 5
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T23:00:09.860061+00:00",
-      "next_run_at": "2026-07-27T08:16:11.005266+00:00",
-      "last_run_at": "2026-07-27T05:16:11.005266+00:00",
+      "next_run_at": "2026-07-27T17:25:27.821028+00:00",
+      "last_run_at": "2026-07-27T14:25:27.821028+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -280,7 +278,6 @@
         "user_id": "7148403012"
       },
       "enabled_toolsets": [
-        "web",
         "terminal",
         "file"
       ],
@@ -311,17 +308,17 @@
       "schedule_display": "30 9 * * *",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 1
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T23:33:33.034145+00:00",
-      "next_run_at": "2026-07-27T09:30:00+00:00",
-      "last_run_at": null,
-      "last_status": null,
-      "last_error": null,
+      "next_run_at": "2026-07-28T09:30:00+00:00",
+      "last_run_at": "2026-07-27T09:30:34.621186+00:00",
+      "last_status": "error",
+      "last_error": "RuntimeError: HTTP 429: [429]: {\"type\":\"error\",\"error\":{\"type\":\"FreeUsageLimitError\",\"message\":\"Rate limit exceeded. Please try again later.\"},\"metadata\":{}}",
       "last_delivery_error": null,
       "deliver": "origin",
       "origin": {
@@ -336,7 +333,8 @@
         "terminal",
         "file"
       ],
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "6b4de282394e",
@@ -410,17 +408,17 @@
       "schedule_display": "every 5m",
       "repeat": {
         "times": null,
-        "completed": 7
+        "completed": 93
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-27T07:02:00.702351+00:00",
-      "next_run_at": "2026-07-27T07:58:04.528669+00:00",
-      "last_run_at": "2026-07-27T07:53:04.528669+00:00",
-      "last_status": "ok",
-      "last_error": null,
+      "next_run_at": "2026-07-27T16:07:26.142416+00:00",
+      "last_run_at": "2026-07-27T16:02:26.142416+00:00",
+      "last_status": "error",
+      "last_error": "RuntimeError: Skipped to prevent unintended spend: global inference config drifted since this job was created (model 'mimohermes' -> 'oc/nemotron-3-ultra-free'), and this job is unpinned. No inference call was made. To run on the new config, pin it explicitly: `cronjob action=update job_id=82ebc249d760 provider=<provider> model=<model>` (or pin the original values to keep them). See #44585.",
       "last_delivery_error": null,
       "deliver": "local",
       "origin": {
@@ -439,5 +437,5 @@
       "fire_claim": null
     }
   ],
-  "updated_at": "2026-07-27T07:53:04.528822+00:00"
+  "updated_at": "2026-07-27T16:06:26.159459+00:00"
 }

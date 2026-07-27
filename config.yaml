@@ -1,6 +1,5 @@
 model:
-  context_length: 256000
-  default: mimohermes
+  default: oc/nemotron-3-ultra-free
   provider: openai-api
 agent:
   max_turns: 120
@@ -14,6 +13,8 @@ compression:
   threshold: 0.9
 approvals:
   destructive_slash_confirm: false
+command_allowlist:
+  - script execution via -e/-c flag
 onboarding:
   seen:
     profile_build_offered: true

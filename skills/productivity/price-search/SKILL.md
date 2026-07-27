@@ -169,6 +169,8 @@ The user explicitly asked: "وقتی بهت میگم برو قیمت قطعات 
 | khodro45.com | Playwright | ✅ Car listings |
 | khodrobank.com | Playwright | ✅ Car prices & reviews |
 | hamrah-mechanic.com | Playwright | ✅ Car marketplace |
+| **motoriran.com** | Playwright | ✅ Motorcycle parts/specifications |
+| **iribike.com** | Playwright | ✅ Motorcycle marketplace |
 
 ### Blocked / Deprecated
 | Site | Issue |

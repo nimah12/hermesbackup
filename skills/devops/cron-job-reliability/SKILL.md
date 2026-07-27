@@ -135,12 +135,52 @@ if alerts:
 | State lost between runs | Persist to `/data/.hermes/*.json` |
 | IranJib prices in Rial | Divide by 10 for Toman |
 | False alerts on metadata | Skip keys with `24h_change`, `index` |
+| Telegram t.me/s/ parsing breaks | Use `tgme_widget_message_text` class divs |
+| Divar car listings no prices in list | Need individual post view or API |
+| Bama API returns minified JSON | Extract from embedded JSON-LD schema.org |
+| Basalam API needs Origin/Referer headers | Add `Origin: https://basalam.com`, `Referer: https://basalam.com/` |
 
 ## Scripts Reference
 
 - `scripts/market_monitor.py` — Main 3-hour market monitor (IranJib + Tala.ir + CoinGecko)
 - `scripts/gold_alert_telegram.py` — 30-min Telegram channel monitor (@se_pz, @talasea_ir)
 - `scripts/tehran_time_sync.py` — 5-min time sync from Worldometer (see references)
+- `scripts/war_intel_monitor.py` — 3-hour war intelligence monitor (8 Iranian Telegram channels)
+
+## Iranian Market Site Patterns (Verified)
+
+| Site | Category | Method | Key Pattern |
+|------|----------|--------|-------------|
+| **IranJib** | Gold/Currency/Oil/Crypto | HTML parse (IDs) | `f_85_63_pr` = 18k gold |
+| **Tala.ir** | Gold/Coin | JSON API | `/api/v1/live-price` |
+| **CoinGecko** | Crypto | JSON API | `/api/v3/simple/price` |
+| **Telegram** | Gold/Currency alerts | HTML parse (t.me/s/) | `tgme_widget_message_text` |
+| **Basalam** | Consumer goods | JSON API | `services.basalam.com/web/v1/search/product/search` + Origin/Referer |
+| **Divar** | Cars/Real estate | HTML/JSON | `api.divar.ir/v8/web-search` + schema.org |
+| **Bama** | Cars | HTML/JSON | JSON-LD in page + `/api/v1/vehicles` |
+| **Sheypoor** | Cars/Parts | HTML | Schema.org microdata |
+| **Digikala** | Electronics | HTML/API | SSR prices in HTML |
+
+## Category-First Search Strategy (User Preference)
+
+**ALWAYS detect category first, then search relevant sites only:**
+
+| Category | Sites (min 10) |
+|----------|----------------|
+| **Computer Parts** | digikala, basalam, sheypoor, sodamarket, technolife, torob, snapp.shop, tapsi.shop |
+| **Cars** | divar, bama, khodrobank, hamrah-mechanic, khodro45 |
+| **Mobile** | digikala, basalam, mobile.ir, technolife, sodamarket, snapp.shop, tapsi.shop |
+| **Motorcycle Parts** | divar, bama, sheypoor, khodro45, basalam, motoriran |
+| **Fashion** | modiseh, digistyle (NOT electronics) |
+
+## Price Search Requirements (User Mandated)
+
+- **Language**: Persian only
+- **Currency**: Toman (1 Toman = 10 Rial) — NEVER mix units
+- **Output**: Min/avg/max, quality evaluation, recommendation, direct links
+- **Links**: Direct link to EVERY listing
+- **Sites**: Minimum 10 Iranian sites per search
+- **Bypass**: Try multiple methods for blocked sites
 
 ## Time Sync Cron Job
 
@@ -161,8 +201,11 @@ output: "/data/.hermes/current_date.json"
 | `scripts/market_monitor.py` | Main 3-hour market monitor (IranJib + Tala.ir + CoinGecko) |
 | `scripts/gold_alert_telegram.py` | 30-min Telegram channel monitor (@se_pz, @talasea_ir) |
 | `scripts/tehran_time_sync.py` | 5-min time sync from Worldometer |
+| `scripts/test_war_intel.py` | War intelligence test for 8 Iranian Telegram channels |
 | `references/iranjib_id_mapping.md` | Complete IranJib HTML ID to price key mapping |
 | `references/telegram_channel_patterns.md` | Telegram channel parsing patterns and price ranges |
+| `references/telegram_monitoring.md` | Telegram monitoring setup and channel list |
+| `references/war_intel_test_results.md` | Test results: 29 alerts from 8 channels (2026-07-27) |
 
 ---
 

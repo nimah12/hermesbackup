@@ -7,27 +7,43 @@
 | @se_pz | https://t.me/s/se_pz | Gold, coin, USD, USDT prices |
 | @talasea_ir | https://t.me/s/talasea_ir | Gold, coin, USD prices |
 
-## t.me/s/ HTML Structure
+## t.me/s/ HTML Structure (Verified 2026-07-27)
 
 The `t.me/s/` public preview pages contain messages in this structure:
 
 ```html
-<div class="tgme_widget_message_wrap" data-post="channel_name/12345">
-  <div class="tgme_widget_message_text js-message_text" dir="auto">
-    <!-- Message text with prices -->
-    طلا ۱۸ عیار: ۱۸,۱۵۶,۵۰۰ تومان
-    سکه تمام: ۱۸۲,۳۰۰,۰۰۰ تومان
-    دلار: ۱,۵۱۵,۶۹۰ تومان
+<div class="tgme_widget_message_wrap js-widget_message_wrap">
+  <div class="tgme_widget_message text_not_supported_wrap js-widget_message" data-post="channel_name/349775" data-view="...">
+    <div class="tgme_widget_message_user">...</div>
+    <div class="tgme_widget_message_bubble">
+      <div class="tgme_widget_message_author accent_color">...</div>
+      <div class="tgme_widget_message_text js-message_text" dir="auto">
+        <!-- Message text with prices/war intel -->
+        طلا ۱۸ عیار: ۱۸,۱۵۶,۵۰۰ تومان
+        سکه تمام: ۱۸۲,۳۰۰,۰۰۰ تومان
+        دلار: ۱,۵۱۵,۶۹۰ تومان
+      </div>
+      <div class="tgme_widget_message_footer compact js-message_footer">
+        <span class="tgme_widget_message_views">40.1K</span>
+        <a class="tgme_widget_message_date" href="https://t.me/channel/349775">
+          <time datetime="2026-07-27T06:07:29+00:00" class="time">06:07</time>
+        </a>
+      </div>
+    </div>
   </div>
 </div>
 ```
 
 ## Regex Patterns for Extraction
 
-### Message Container
+### Message Container (Verified Working)
+
 ```python
-# Main pattern for t.me/s/ pages
-MESSAGE_PATTERN = r'data-post="[^"]+"[^>]*>.*?<div class="tgme_widget_message_text[^"]*"[^>]*>(.*?)</div>'
+# Main pattern for t.me/s/ pages - extracts text from js-message_text divs
+MESSAGE_PATTERN = r'<div class="tgme_widget_message_text[^"]*"[^>]*dir="auto">(.*?)</div>'
+
+# Alternative: data-post based
+DATA_POST_PATTERN = r'data-post="[^"]*"[^>]*>.*?<div class="tgme_widget_message_text[^"]*"[^>]*dir="auto">(.*?)</div>'
 ```
 
 ### Price Extraction Patterns (Persian)
@@ -61,6 +77,25 @@ PRICE_PATTERNS = {
     ],
     "usdt": [
         r'(?:تتر|usdt|tether)\D*([\d,]{5,7})',
+    ],
+}
+```
+
+## War/Conflict Keywords (For Alert Classification)
+
+```python
+WAR_KEYWORDS = {
+    "critical": [
+        "موشک", "موشک بالستیک", "پهپاد", "حمله", "درگیری", 
+        "شهید", "کمان", "نطنز", "فردو", "خلیج فارس", "هرمز"
+    ],
+    "high": [
+        "حزب‌الله", "حوثی", "حماس", "پنتاگون", "اربیل", 
+        "عین‌الاسد", "حامل‌هواپیما", "سنتکام", "ایران", "اسرائیل"
+    ],
+    "medium": [
+        "تهدید", "مناور", "تسلیح", "غنی‌سازی", "صهیونیست", 
+        "استکبار", "آمریکا", "نیروی دریایی", "سپاه"
     ],
 }
 ```
@@ -112,8 +147,8 @@ PRICE_PATTERNS = {
 1. **Persian digits**: Messages use Persian numerals (۰-۹) - must convert
 2. **ZWJ characters**: `&#8204;` (zero-width joiner) appears in text - strip with `.replace('\u200c', '')`
 3. **HTML entities**: `&nbsp;`, `&zwj;` - decode before parsing
-3. **Message deduplication**: Use `data-post` attribute for unique message IDs
-4. **Rate limiting**: t.me/s/ allows frequent requests, but add small delay if needed
+4. **Message deduplication**: Use `data-post` attribute for unique message IDs
+5. **Rate limiting**: t.me/s/ allows frequent requests, but add small delay if needed
 
 ## Python Helpers
 
@@ -132,3 +167,22 @@ def clean_message(text):
     text = normalize_persian_digits(text)
     return text.strip()
 ```
+
+---
+
+## War Intel Channels (Additional)
+
+| Channel | Handle | Focus | Reliability |
+|---------|--------|-------|-------------|
+| Iran International TV | @iranintltv | Breaking Iran news, military | ⭐⭐⭐⭐⭐ |
+| Khamenei.ir (Persian) | @km_ap | Supreme Leader statements | ⭐⭐⭐⭐⭐ |
+| Tasnim News | @tasnimnews | IRGC, military, foreign policy | ⭐⭐⭐⭐ |
+| Fars News | @farsna | IRGC, defense, nuclear | ⭐⭐⭐⭐ |
+| Tabnak | @tabzlive | Political/military analysis | ⭐⭐⭐ |
+| Alibk3 | @alibk3 | Military hardware, strikes | ⭐⭐⭐ |
+| Khabari 18 | @khabari_18 | Breaking alerts | ⭐⭐⭐ |
+| Ne_Wg | @ne_wg | Geopolitical analysis | ⭐⭐⭐ |
+
+## War Intel HTML Structure (Same as above)
+
+Messages use same `tgme_widget_message_text js-message_text` class.

@@ -141,6 +141,7 @@ ID_MAP = {
 
 ```python
 # Pattern: id="f_85_63_pr"><span class="lastprice">۱۸۱,۵۶۵,۰۰۰
+# Use for each ID in ID_MAP:
 pattern = rf'id="{id_str}"[^>]*><span class="lastprice">([^<]+)'
 ```
 
@@ -153,6 +154,7 @@ pattern = rf'id="{id_str}"[^>]*><span class="lastprice">([^<]+)'
 - **Brent/WTI/BTC/Gold ounce already in USD** → Divisor 1
 - **Update frequency**: IranJib updates every 60 seconds (see `refreshtime` counter)
 - **Page encoding**: Persian numbers (۰-۹) may appear - use `.replace("،", "").replace(",", "")` for parsing
+- **Required header**: `Referer: https://www.iranjib.ir/` to avoid 403
 
 ---
 
@@ -166,3 +168,22 @@ pattern = rf'id="{id_str}"[^>]*><span class="lastprice">([^<]+)'
   ...
 </tr>
 ```
+
+---
+
+## Verified Prices (2026-07-27 / 6 Mordad 1405)
+
+| Key | Raw Value (Rial) | Toman | Display |
+|-----|------------------|-------|---------|
+| gold_18k_toman | 181,565,000 | 18,156,500 | ۱۸,۱۵۶,۵۰۰ |
+| gold_24k_toman | 242,060,000 | 24,206,000 | ۲۴,۲۰۶,۰۰۰ |
+| mesghal_toman | 786,500,000 | 78,650,000 | ۷۸,۶۵۰,۰۰۰ |
+| coin_full_new_toman | 1,823,000,000 | 182,300,000 | ۱۸۲,۳۰۰,۰۰۰ |
+| coin_half_toman | 935,000,000 | 93,500,000 | ۹۳,۵۰۰,۰۰۰ |
+| coin_quarter_toman | 525,000,000 | 52,500,000 | ۵۲,۵۰۰,۰۰۰ |
+| usd_remittance_toman | 15,156,900 | 1,515,690 | ۱,۵۱۵,۶۹۰ |
+| eur_remittance_toman | 17,240,430 | 1,724,043 | ۱,۷۲۴,۰۴۳ |
+| usdt_toman | 188,088 | 188,088 | ۱۸۸,۰۸۸ |
+| btc_usd | 65,363 | 65,363 | $۶۵,۳۶۳ |
+| brent_usd | 89.94 | 89.94 | $۸۹.۹۴ |
+| wti_usd | 83.51 | 83.51 | $۸۳.۵۱ |
