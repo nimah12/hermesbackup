@@ -22,16 +22,16 @@
       "schedule_display": "every 720m",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 1
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T16:05:56.985865+00:00",
-      "next_run_at": "2026-07-27T16:06:15.325705+00:00",
-      "last_run_at": null,
-      "last_status": null,
+      "next_run_at": "2026-07-27T16:06:17.768075+00:00",
+      "last_run_at": "2026-07-27T04:06:17.768075+00:00",
+      "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
       "deliver": "origin",
@@ -43,7 +43,8 @@
         "user_id": "7148403012"
       },
       "enabled_toolsets": null,
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "9164df07a972",
@@ -53,11 +54,11 @@
       "skill": null,
       "model": null,
       "provider": null,
-      "provider_snapshot": "openrouter",
+      "provider_snapshot": null,
       "model_snapshot": null,
       "base_url": null,
-      "script": null,
-      "no_agent": false,
+      "script": "market_monitor.py",
+      "no_agent": true,
       "context_from": null,
       "schedule": {
         "kind": "interval",
@@ -67,15 +68,15 @@
       "schedule_display": "every 240m",
       "repeat": {
         "times": null,
-        "completed": 2
+        "completed": 3
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T18:39:23.114707+00:00",
-      "next_run_at": "2026-07-27T06:39:38.176610+00:00",
-      "last_run_at": "2026-07-27T02:39:38.176610+00:00",
+      "next_run_at": "2026-07-27T10:40:18.090548+00:00",
+      "last_run_at": "2026-07-27T06:40:18.090548+00:00",
       "last_status": "error",
       "last_error": "RuntimeError: Skipped to prevent unintended spend: global inference config drifted since this job was created (provider 'openrouter' -> 'openai-api'), and this job is unpinned. No inference call was made. To run on the new config, pin it explicitly: `cronjob action=update job_id=9164df07a972 provider=<provider> model=<model>` (or pin the original values to keep them). See #44585.",
       "last_delivery_error": null,
@@ -139,18 +140,16 @@
     {
       "id": "11d3ff670878",
       "name": "Market Price Monitoring",
-      "prompt": "Market price monitoring job. Run every 3 hours. Check prices from MULTIPLE Iranian and international sources:\n\n**\ud83e\udd47 Gold/Coin (IRAN - multiple sources):**\n- https://www.iranjib.ir/showgroup/23/realtime_price/ (primary)\n- https://talasea.ir/ (cross-check)\n- https://mesghal.com/ (gold/coin prices)\n- https://www.tgju.org/profile/price_gold_18 (18k gold)\n- https://www.tgju.org/profile/price_gold_24 (24k gold)\n\n**\ud83d\udcb5 Currency/USDT (IRAN):**\n- https://bonbast.com/ (free market USD, EUR, GBP, USDT)\n- https://www.tgju.org/profile/price_dollar_rl (dollar free market)\n- https://www.tgju.org/profile/price_usdt_rl (USDT free market)\n- https://bestchange.com/ (USDT rates from exchangers)\n\n**\u20bf Crypto (International):**\n- https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=1&limit=20&sortBy=market_cap&sortType=desc&convert=USD (BTC, ETH, USDT, BNB, SOL, XRP)\n- https://api.coindesk.com/v1/bpi/currentprice.json (BTC price)\n\n**\ud83d\udee2\ufe0f Oil (International):**\n- https://www.oilprice.com/ (Brent, WTI)\n- https://www.reuters.com/markets/commodities/ (oil news + prices)\n\n**\ud83d\udcf0 Middle East News (for alerts):**\n- https://www.reuters.com/world/middle-east/\n- https://www.aljazeera.net/where/middle-east\n\n**\ud83d\udcc8 Telegram Channels for Market Analysis (gold, currency, crypto, economic analysis):**\n- @talasea_ir \u2192 https://t.me/talasea_ir\n- @ecoshariff \u2192 https://t.me/ecoshariff\n- @se_pz \u2192 https://t.me/se_pz\n- @eco_roozbeh \u2192 https://t.me/eco_roozbeh\n\n**Alert Conditions (each checked separately):**\n1. Gold/Coin/Currency: Sudden change >5% vs last stored value\n2. Major Middle East news: war, conflict, new sanctions, nuclear talks\n3. Oil: >3% daily change\n4. Telegram channel analysis: If channels report major market moves, policy changes, or breaking economic news\n\n**Actions:**\n1. Scrape/check ALL web sources above (use Playwright for JS sites, direct API for JSON endpoints)\n2. Fetch recent posts from 4 Telegram channels via t.me web interface - extract market-relevant content (price predictions, breaking news, policy announcements, technical analysis)\n3. For each asset, take median/average of available web sources (more reliable than single source)\n4. Compare with last stored values in /data/.hermes/market_prices.json\n5. If threshold exceeded OR Telegram channels signal major move \u2192 Send Telegram alert with: asset name, old/new price, % change, source links (web + Telegram)\n6. Save new aggregated prices to JSON for next comparison\n7. Silent if no alerts (no message on normal runs)\n\n**Language:** Persian\n**Tools:** Playwright (web), terminal (curl/API), file (JSON storage)",
-      "skills": [
-        "price-search"
-      ],
-      "skill": "price-search",
+      "prompt": "Market price monitoring - runs every 3 hours. Uses Python script to fetch prices from multiple Iranian and international sources.\n\n**Sources:**\n- iranijib.ir (gold, coins, currency, crypto, oil)\n- tala.ir (gold, coins)\n- mesghal.com (gold)\n- bonbast.com, tgju.org (currency)\n- bestchange.com (exchanges)\n- CoinMarketCap, CoinDesk APIs (crypto)\n- oilprice.com, reuters.com (oil)\n\n**Alert thresholds:** >5% for gold/currency, >3% for oil\n\n**Output:** Silent unless threshold exceeded, then sends Telegram message with details.\n\n**Script:** market_monitor.py",
+      "skills": [],
+      "skill": null,
       "model": null,
       "provider": null,
-      "provider_snapshot": "openai-api",
-      "model_snapshot": "mimohermes",
+      "provider_snapshot": null,
+      "model_snapshot": null,
       "base_url": null,
-      "script": null,
-      "no_agent": false,
+      "script": "market_monitor.py",
+      "no_agent": true,
       "context_from": null,
       "schedule": {
         "kind": "interval",
@@ -160,15 +159,15 @@
       "schedule_display": "every 180m",
       "repeat": {
         "times": null,
-        "completed": 1
+        "completed": 2
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T21:23:38.604814+00:00",
-      "next_run_at": "2026-07-27T06:50:38.282747+00:00",
-      "last_run_at": "2026-07-27T00:50:24.315890+00:00",
+      "next_run_at": "2026-07-27T10:06:04.598866+00:00",
+      "last_run_at": "2026-07-27T07:02:49.640214+00:00",
       "last_status": "error",
       "last_error": "RuntimeError: HTTP 502: [502]: fetch connect timeout",
       "last_delivery_error": null,
@@ -181,7 +180,6 @@
         "user_id": "7148403012"
       },
       "enabled_toolsets": [
-        "web",
         "terminal",
         "file"
       ],
@@ -191,18 +189,16 @@
     {
       "id": "eba28df13194",
       "name": "Gold Price Alert - talasea.ir",
-      "prompt": "Gold price monitoring from talasea.ir. Run every 30 minutes.\n\n**Source:** https://talasea.ir/\n- Scrape gold prices (18k, 24k per gram, mesghal, ounce)\n- Also check coin prices if available\n\n**Alert Condition:**\n- Any gold price (18k, 24k, mesghal, ounce) changes >5% vs last stored value\n- Compare with values saved in /data/.hermes/talasea_gold_prices.json\n\n**Actions:**\n1. Use Playwright to fetch https://talasea.ir/\n2. Extract gold prices from the page\n3. Compare with last stored prices in JSON file\n4. If any gold price changed >5% \u2192 Send Telegram alert with:\n   - Gold type (18k, 24k, mesghal, ounce)\n   - Old price, new price, % change\n   - Source link: https://talasea.ir/\n5. Save new prices to /data/.hermes/talasea_gold_prices.json\n6. Silent if no alerts (no message on normal runs)\n\n**Language:** Persian\n**Tools:** Playwright (web), file (JSON storage)",
-      "skills": [
-        "price-search"
-      ],
-      "skill": "price-search",
+      "prompt": "Telegram gold/currency price alert - runs every 30 minutes via script",
+      "skills": [],
+      "skill": null,
       "model": null,
       "provider": null,
-      "provider_snapshot": "openai-api",
-      "model_snapshot": "mimohermes",
+      "provider_snapshot": null,
+      "model_snapshot": null,
       "base_url": null,
-      "script": null,
-      "no_agent": false,
+      "script": "gold_alert_telegram.py",
+      "no_agent": true,
       "context_from": null,
       "schedule": {
         "kind": "interval",
@@ -212,15 +208,15 @@
       "schedule_display": "every 30m",
       "repeat": {
         "times": null,
-        "completed": 7
+        "completed": 12
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T22:48:56.845343+00:00",
-      "next_run_at": "2026-07-27T04:13:38.179357+00:00",
-      "last_run_at": "2026-07-27T03:13:29.147985+00:00",
+      "next_run_at": "2026-07-27T07:37:00.387903+00:00",
+      "last_run_at": "2026-07-27T07:07:00.387903+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -233,7 +229,6 @@
         "user_id": "7148403012"
       },
       "enabled_toolsets": [
-        "web",
         "terminal",
         "file"
       ],
@@ -264,15 +259,15 @@
       "schedule_display": "every 180m",
       "repeat": {
         "times": null,
-        "completed": 1
+        "completed": 2
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T23:00:09.860061+00:00",
-      "next_run_at": "2026-07-27T05:00:44.458266+00:00",
-      "last_run_at": "2026-07-27T02:00:44.458266+00:00",
+      "next_run_at": "2026-07-27T08:16:11.005266+00:00",
+      "last_run_at": "2026-07-27T05:16:11.005266+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -390,7 +385,59 @@
         "file"
       ],
       "workdir": null
+    },
+    {
+      "id": "82ebc249d760",
+      "name": "Tehran Time Sync - Worldometer",
+      "prompt": "Tehran time synchronization from Worldometer. Run every 5 minutes.\n\n**Source:** https://www.worldometers.info/time/tehran-iran/ (the Google share link redirects here)\n\n**Task:**\n1. Fetch the page content\n2. Extract current Tehran time and date from the live clock data\n3. Update `/data/.hermes/current_date.json` with:\n   - gregorian date (YYYY-MM-DD)\n   - jalali date (YYYY-MM-DD) \n   - jalali_full (e.g. \"\u06f6 \u0645\u0631\u062f\u0627\u062f \u06f1\u06f4\u06f0\u06f5\")\n   - day_name (English)\n   - day_name_fa (Persian)\n   - time_tehran (HH:MM:SS)\n   - timezone: \"Asia/Tehran\"\n   - updated_at (ISO timestamp)\n   - source: \"worldometer\"\n\n**The page has:** serverTime prop with timestamp, and live clock showing Tehran time.\n\n**Silent mode:** Only output if error, otherwise no message.\n\n**Storage:** `/data/.hermes/current_date.json` - this is the single source of truth for all other tasks.",
+      "skills": [
+        "price-search"
+      ],
+      "skill": "price-search",
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "openai-api",
+      "model_snapshot": "mimohermes",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 5,
+        "display": "every 5m"
+      },
+      "schedule_display": "every 5m",
+      "repeat": {
+        "times": null,
+        "completed": 2
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-27T07:02:00.702351+00:00",
+      "next_run_at": "2026-07-27T07:27:17.981012+00:00",
+      "last_run_at": "2026-07-27T07:17:06.177236+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "7148403012",
+        "chat_name": "Nima",
+        "thread_id": null,
+        "user_id": "7148403012"
+      },
+      "enabled_toolsets": [
+        "web",
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "fire_claim": null
     }
   ],
-  "updated_at": "2026-07-27T04:06:15.325855+00:00"
+  "updated_at": "2026-07-27T07:22:17.981293+00:00"
 }
