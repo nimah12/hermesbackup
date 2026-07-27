@@ -29,7 +29,7 @@
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T16:05:56.985865+00:00",
-      "next_run_at": "2026-07-27T04:05:56.986109+00:00",
+      "next_run_at": "2026-07-27T16:06:15.325705+00:00",
       "last_run_at": null,
       "last_status": null,
       "last_error": null,
@@ -67,15 +67,15 @@
       "schedule_display": "every 240m",
       "repeat": {
         "times": null,
-        "completed": 1
+        "completed": 2
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T18:39:23.114707+00:00",
-      "next_run_at": "2026-07-27T02:39:31.966913+00:00",
-      "last_run_at": "2026-07-26T22:39:31.966913+00:00",
+      "next_run_at": "2026-07-27T06:39:38.176610+00:00",
+      "last_run_at": "2026-07-27T02:39:38.176610+00:00",
       "last_status": "error",
       "last_error": "RuntimeError: Skipped to prevent unintended spend: global inference config drifted since this job was created (provider 'openrouter' -> 'openai-api'), and this job is unpinned. No inference call was made. To run on the new config, pin it explicitly: `cronjob action=update job_id=9164df07a972 provider=<provider> model=<model>` (or pin the original values to keep them). See #44585.",
       "last_delivery_error": null,
@@ -160,17 +160,17 @@
       "schedule_display": "every 180m",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 1
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T21:23:38.604814+00:00",
-      "next_run_at": "2026-07-27T00:23:38.608542+00:00",
-      "last_run_at": null,
-      "last_status": null,
-      "last_error": null,
+      "next_run_at": "2026-07-27T06:50:38.282747+00:00",
+      "last_run_at": "2026-07-27T00:50:24.315890+00:00",
+      "last_status": "error",
+      "last_error": "RuntimeError: HTTP 502: [502]: fetch connect timeout",
       "last_delivery_error": null,
       "deliver": "origin",
       "origin": {
@@ -185,7 +185,8 @@
         "terminal",
         "file"
       ],
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "eba28df13194",
@@ -211,16 +212,16 @@
       "schedule_display": "every 30m",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 7
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T22:48:56.845343+00:00",
-      "next_run_at": "2026-07-26T23:18:56.849187+00:00",
-      "last_run_at": null,
-      "last_status": null,
+      "next_run_at": "2026-07-27T04:13:38.179357+00:00",
+      "last_run_at": "2026-07-27T03:13:29.147985+00:00",
+      "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
       "deliver": "origin",
@@ -236,7 +237,8 @@
         "terminal",
         "file"
       ],
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "3eaeabca4dae",
@@ -262,14 +264,66 @@
       "schedule_display": "every 180m",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 1
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T23:00:09.860061+00:00",
-      "next_run_at": "2026-07-27T02:00:09.870128+00:00",
+      "next_run_at": "2026-07-27T05:00:44.458266+00:00",
+      "last_run_at": "2026-07-27T02:00:44.458266+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "7148403012",
+        "chat_name": "Nima",
+        "thread_id": null,
+        "user_id": "7148403012"
+      },
+      "enabled_toolsets": [
+        "web",
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "d039ecf80095",
+      "name": "Daily Tech News Digest - AI, Gaming, SpaceX",
+      "prompt": "Tech news digest for AI, Gaming, SpaceX, and technology. Run daily at 13:00 Tehran time (09:30 UTC).\n\n**Sources to Check (via web scraping/Playwright):**\n\n**\ud83e\udd16 AI & Machine Learning:**\n- https://www.technologyreview.com/topic/artificial-intelligence/\n- https://venturebeat.com/category/ai/\n- https://www.theverge.com/ai-artificial-intelligence\n- https://openai.com/blog/\n- https://deepmind.google/discover/blog/\n- https://huggingface.co/blog\n- https://www.artificialintelligence-news.com/\n\n**\ud83c\udfae Gaming:**\n- https://www.ign.com/\n- https://www.gamespot.com/\n- https://www.pcgamer.com/\n- https://www.eurogamer.net/\n- https://kotaku.com/\n- https://www.gamedeveloper.com/\n\n**\ud83d\ude80 SpaceX & Space:**\n- https://www.spacex.com/updates/\n- https://www.nasa.gov/news/\n- https://www.space.com/\n- https://arstechnica.com/space/\n- https://www.nasaspaceflight.com/\n\n**\ud83d\udcbb General Tech:**\n- https://www.theverge.com/\n- https://arstechnica.com/\n- https://www.wired.com/\n- https://techcrunch.com/\n- https://www.engadget.com/\n\n**Actions:**\n1. Fetch latest headlines (last 24-48 hours) from each source\n2. Filter for SIGNIFICANT news only (major releases, breakthroughs, launches, acquisitions, major updates)\n3. Skip: rumors, minor updates, opinion pieces, \"how-to\" articles\n4. Categorize each item: AI / Gaming / SpaceX-Space / General Tech\n5. Create a clean Persian digest with:\n   - \ud83d\udcc5 Date header (Jalali + Gregorian)\n   - Category sections with 3-5 top items each\n   - Each item: Title (Persian + English), 1-2 sentence summary, source link\n   - \ud83d\ude80 Highlight: SpaceX launches, major AI model releases, big game releases\n6. Send to Telegram (always deliver, not silent - user wants daily digest)\n7. Save last checked timestamps to /data/.hermes/tech_news_state.json to avoid duplicates\n\n**Language:** Persian (Farsi)\n**Format:** Clean, scannable digest with emojis and categories\n**Tools:** Playwright (web), file (JSON storage)",
+      "skills": [
+        "price-search"
+      ],
+      "skill": "price-search",
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "openai-api",
+      "model_snapshot": "mimohermes",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "30 9 * * *",
+        "display": "30 9 * * *"
+      },
+      "schedule_display": "30 9 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-26T23:33:33.034145+00:00",
+      "next_run_at": "2026-07-27T09:30:00+00:00",
       "last_run_at": null,
       "last_status": null,
       "last_error": null,
@@ -288,7 +342,55 @@
         "file"
       ],
       "workdir": null
+    },
+    {
+      "id": "6b4de282394e",
+      "name": "Date Sync - Tehran Midnight",
+      "prompt": "Date synchronization task. Run daily at 00:00 Tehran time (20:30 UTC previous day).\n\n**Purpose:** Ensure the agent always has the correct current date (Jalali and Gregorian) for accurate price reporting, news dating, and time-sensitive tasks.\n\n**Actions:**\n1. Get current date/time from system (Tehran timezone)\n2. Format as both Jalali (Persian) and Gregorian\n3. Save to /data/.hermes/current_date.json with structure:\n   {\n     \"gregorian\": \"2026-07-27\",\n     \"jalali\": \"1405-05-06\",\n     \"day_name\": \"Monday\",\n     \"day_name_fa\": \"\u062f\u0648\u0634\u0646\u0628\u0647\",\n     \"updated_at\": \"2026-07-27T00:00:00+03:30\",\n     \"timezone\": \"Asia/Tehran\"\n   }\n4. Read the file in future runs to verify sync\n5. Silent on success (no message), only alert if there's an error\n\n**Commands to use:**\n- `date` command with timezone\n- Or use `curl` to a time API as backup\n\n**Language:** Persian\n**Tools:** terminal, file",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "openai-api",
+      "model_snapshot": "mimohermes",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "30 20 * * *",
+        "display": "30 20 * * *"
+      },
+      "schedule_display": "30 20 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-26T23:36:23.752772+00:00",
+      "next_run_at": "2026-07-27T20:30:00+00:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "7148403012",
+        "chat_name": "Nima",
+        "thread_id": null,
+        "user_id": "7148403012"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null
     }
   ],
-  "updated_at": "2026-07-26T23:04:56.188464+00:00"
+  "updated_at": "2026-07-27T04:06:15.325855+00:00"
 }

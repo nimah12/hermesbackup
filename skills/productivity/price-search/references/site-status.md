@@ -21,9 +21,11 @@
 | Site | URL | Status | Notes |
 |------|-----|--------|-------|
 | Technolife | technolife.com | ✅ Works | Slower, good for electronics |
-| Digistyle | digistyle.com | ✅ Works | Fashion/beauty focused |
 | Sodamarket | sodamarket.com | ✅ Works | General products |
 | Modiseh | modiseh.com | ✅ Works | Fashion/clothing |
+| Digistyle | digistyle.com | ❌ Removed | **Fashion/beauty only** — NOT for electronics/mobile |
+| Snapp Shop | snapp.shop | ⚠️ Works | Snapp's e-commerce platform, growing electronics |
+| Tapsi Shop | tapsi.shop | ⚠️ Works | Tapsi's e-commerce platform, newer player |
 | Bazargan | bazargan.com | ✅ Works | Industrial/tools |
 | Nashr | nashr.com | ✅ Works | Books |
 | Mobile.ir | mobile.ir | ✅ Works | Mobile phones |
@@ -67,6 +69,9 @@
 - Modiseh: `https://modiseh.com/search?q={query}`
 - Zoomit: `https://www.zoomit.ir/search?q={query}`
 - Torob: `https://torob.com/search/?query={query}`
+- Snapp Market: `https://snapp.market/search?q={query}`
+- **Snapp Shop: `https://snapp.shop/search?q={query}`**
+- **Tapsi Shop: `https://tapsi.shop/search?q={query}`**
 
 ### Car/Motorcycle
 - Divar Cars: `https://divar.ir/s/tehran/car` (change city as needed)

@@ -114,7 +114,7 @@ The user explicitly asked: "وقتی بهت میگم برو قیمت قطعات 
 
 | Category | Sites to Search | DO NOT Search |
 |----------|----------------|---------------|
-| 🖥️ Computer/Laptop | digikala, basalam, sheypoor, sodamarket, technolife, digistyle, torob | car sites |
+| 🖥️ Computer/Laptop | digikala, basalam, sheypoor, sodamarket, technolife, torob | car sites |
 | 🚗 Cars | divar, bama, khodrobank, hamrah-mechanic, khodro45 | shop sites |
 | 🏍️ Motorcycles | divar, bama, khodro45 | shop sites |
 | 📱 Mobile/Tablet | digikala, basalam, mobile.ir | car sites |
@@ -147,7 +147,6 @@ The user explicitly asked: "وقتی بهت میگم برو قیمت قطعات 
 | sheypoor.com | Playwright | ✅ Classifieds, verify currency unit |
 | divar.ir | Playwright | ✅ Classifieds, prices in Toman |
 | technolife.com | Playwright | ✅ Electronics/laptops |
-| digistyle.com | Playwright | ✅ Fashion/beauty |
 | sodamarket.com | Playwright | ✅ General |
 | modiseh.com | Playwright | ✅ Fashion/clothing |
 | bazargan.com | Playwright | ✅ Industrial/tools |
@@ -159,6 +158,8 @@ The user explicitly asked: "وقتی بهت میگم برو قیمت قطعات 
 | torob.com | Playwright | ⚠️ CAPTCHA from cloud IPs |
 | emalls.ir | Playwright | ⚠️ SSL issues, sometimes works |
 | snapp.market | Playwright | ⚠️ Grocery, limited electronics |
+| **snapp.shop** | Playwright | ⚠️ Snapp's shop platform, growing electronics |
+| **tapsi.shop** | Playwright | ⚠️ Tapsi's shop platform, newer player |
 
 ### Car & Motorcycle
 | Site | Method | Status |
@@ -212,6 +213,7 @@ PERSIAN_DIGITS = str.maketrans('۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', '0123
 - **CRITICAL: Not searching enough sites** — User explicitly listed required sites: Digikala, Emalls, Sheypoor, Divar, Snapp, Tapsi, Torob, eSAm, Computer Parsian, Zoomit. The user said "وقتی بهت میگم ده تا سایت یعنی دیجیکالا ایمالز شیپور دیوار اسنپ تپسی ترب esam کامپیوتر پارسیان زومیت". ALWAYS search at least 10 sites per product. If one site blocks you, move to the next — don't stop.
 - **USER FRUSTRATION: Limiting to one site** — I once showed only Basalam results. The user was VERY frustrated. ALWAYS search ALL sites in the category and present comprehensive results from EVERY site that works.
 - **USER FRUSTRATION: Searching wrong categories** — I once searched car sites for computer parts. The user said "وقتمو تلف نکن". ALWAYS detect category first.
+- **Digistyle removed from electronics/mobile** — Digistyle is fashion/beauty only. Never search it for phones, laptops, computer parts. Only use for clothing/cosmetics queries.
 - **USER FRUSTRATION: Not providing links** — The user wants clickable links to products. Always include URLs.
 - **CRITICAL: Wrong dates in price reports** — Session 2026-07-26: I reported mesghal.com data as "5 Mordad 1403" when it was actually 1405. The user was furious (😡😡😡). ALWAYS verify the date on the source page before reporting. Use tgju.org which shows correct Jalali dates.
 - **CRITICAL: Wrong price source** — mesghal.com showed stale/old prices (14,800,000 Rial = 1,480,000 Toman for 18k gold) while tala.ir showed correct 17,878,900 Toman. Cross-reference multiple sources. tgju.org and tala.ir are more reliable for gold/currency.
@@ -233,9 +235,11 @@ PERSIAN_DIGITS = str.maketrans('۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩', '0123
 
 ## Reference Files
 
-- `references/session-notes.md` — Session notes including Playwright setup, user preferences, and critical config warning
-- `references/site-status.md` — Current status of all Iranian e-commerce/car sites with URL patterns and selectors
-- `references/basalam-api.md` — Basalam API documentation (direct API, no browser needed)
-- `references/market-monitoring.md` — Financial market monitoring patterns (gold, currency, crypto, oil, ME news)
 - `references/tgju-api.md` — **tgju.org API patterns** — Tehran Gold & Currency Exchange real-time prices (PRIMARY SOURCE for gold/currency)
+- `references/session-notes.md` — Session notes including Playwright setup, user preferences, and critical config warning
 - `references/session-2026-07-26-car-search-patterns.md` — Working selectors, API endpoints, and patterns for car searches (Divar, Basalam API, Bama, Khodro45). Includes July 2026 selectors for Divar (`kt-post-card__title`, `kt-post-card__description`).
+- `references/site-status.md` — Current status of all Iranian e-commerce/car sites with URL patterns and selectors
+- `references/market-monitoring.md` — Financial market monitoring patterns (gold, currency, crypto, oil, ME news)
+- `references/basalam-api.md` — Basalam API documentation (direct API, no browser needed)
+- `references/session-2026-07-26-lessons.md` — Lessons learned from car search session
+- `references/session-2026-07-27-comprehensive.md` — **Comprehensive session learnings: date verification, currency rules, site categorization, cron jobs, Telegram channels, Playwright optimizations, iPhone 17 research, user preferences, pitfalls**
