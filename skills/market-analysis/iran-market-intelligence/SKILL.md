@@ -33,14 +33,14 @@ Unified methodology for real-time Iranian financial market monitoring and geopol
 | **Used/stock focus** | User buys used/stock hardware (GPU, CPU, motherboard) |
 
 ### 3. Cron Job Patterns (Proven Working)
-| Job | Schedule | Script | Mode |
-|-----|----------|--------|------|
-| Tehran Time Sync | Every 5 min | `tehran_time_sync.py` | `no_agent=true` |
-| Market Monitor (Full) | Every 3h | `market_monitor.py` | `no_agent=true` |
-| Gold/Telegram Alert | Every 30m | `gold_alert_telegram.py` | `no_agent=true` |
-| War Intel | Every 3h | `war_intel_monitor.py` | `no_agent=true` |
-| Tech News Digest | Daily 13:00 Tehran | `tech_news_digest.py` | `no_agent=true` |
-| Backup to GitHub | Every 12h | `backup.sh` | `no_agent=true` |
+| Job | Schedule | Script | Mode | Cron ID |
+|-----|----------|--------|------|---------|
+| Tehran Time Sync | Every 5 min | `tehran_time_sync.py` | `no_agent=true` | 82ebc249d760 |
+| Market Monitor (Full) | Every 3h | `market_monitor.py` | `no_agent=true` | 11d3ff670878 |
+| Gold/Telegram Alert | Every 30m | `gold_alert_telegram.py` | `no_agent=true` | eba28df13194 |
+| War Intel | Every 3h | `war_intel_monitor.py` | `no_agent=true` | 3eaeabca4dae |
+| Tech News Digest | Daily 13:00 Tehran | `tech_news_digest.py` | `no_agent=true` | (pending) |
+| Backup to GitHub | Every 12h | `backup.sh` | `no_agent=true` | (pending) |
 
 > **Critical**: All cron jobs converted to `no_agent=true` direct Python scripts to avoid LLM+Playwright Provider timeouts (21s+ failures).
 
@@ -98,6 +98,14 @@ WAR_CHANNELS = [
 | Tehran Stock Index | >-2% | >-5% | Reduce exposure |
 | BTC Iran Premium | >10% | >20% | Sell premium / buy dip |
 
+## Output Color Convention (Iranian Market Standard)
+**CRITICAL**: In Iranian financial context, colors are REVERSED from Western convention:
+- 🔴 **RED** = Price INCREASE / UP (bad for buyers, "alert/warning")
+- 🟢 **GREEN** = Price DECREASE / DOWN (good for buyers, "relief")
+- 🟡 **YELLOW/ORANGE** = High volatility / fluctuation (>threshold)
+
+All formatted Telegram outputs MUST follow this convention. Never use green for price increases.
+
 ---
 
 ## Price Search Categories & Approved Sites
@@ -114,36 +122,38 @@ WAR_CHANNELS = [
 
 ## Proven Extraction Scripts
 
-### Market Monitor (`market_monitor.py`)
+### Market Monitor (`scripts/market_monitor.py`)
 ```python
-# Extracts 24 prices from IranJib + Tala.ir + CoinGecko
+# Extracts 24+ prices from IranJib + Tala.ir + CoinGecko
 # Saves to /data/.hermes/market_prices.json
 # Alerts on >5% gold/currency, >3% oil
-# Runs every 3h via cron 11d3ff670878 (no_agent=true)
+# Emoji indicators: 🔴 >5%, 🟠 >3%, 🟡 >1%, 🟢 ≤1%
+# Runs every 3h via cron (no_agent=true)
+# Supports --silent flag for cron (only outputs on alerts)
 ```
 
-### Gold Telegram Alert (`gold_alert_telegram.py`)
+### Gold Telegram Alert (`scripts/gold_alert_telegram.py`)
 ```python
 # Monitors @se_pz and @talasea_ir only (user-specified)
 # Checks last 20 messages each
 # Alerts on >5% price change for gold/coin/dollar/USDT
 # Silent otherwise
-# Runs every 30m via cron eba28df13194 (no_agent=true)
+# Runs every 30m via cron (no_agent=true)
 ```
 
-### War Intel Monitor (`war_intel_monitor.py`)
+### War Intel Monitor (`scripts/war_intel_monitor.py`)
 ```python
 # Fetches 8 Telegram channels via t.me/s/ public preview
 # Parses tgme_widget_message_text class
 # Keyword classification: Critical/High/Medium
-# Runs every 3h via cron 3eaeabca4dae (no_agent=true)
+# Runs every 3h via cron (no_agent=true)
 ```
 
-### Tehran Time Sync (`tehran_time_sync.py`)
+### Tehran Time Sync (`scripts/tehran_time_sync.py`)
 ```python
 # Fetches Worldometer Tehran time
 # Saves to /data/.hermes/current_date.json
-# Runs every 5m via cron 82ebc249d760 (no_agent=true)
+# Runs every 5m via cron (no_agent=true)
 ```
 
 ---
@@ -171,8 +181,14 @@ WAR_CHANNELS = [
 ## References
 - `references/iranjib-ids.md` — Exact HTML ID mappings
 - `references/cron-patterns.md` — Proven cron job configurations
-- `references/extraction-scripts/` — Ready-to-deploy Python scripts
 - `references/alert-thresholds.md` — Threshold matrix with rationale
+- `references/market-change-indicators.md` — Emoji indicator thresholds and Iranian color convention
+- **Scripts Location**: All extraction scripts live in `scripts/` directory:
+  - `scripts/market_monitor.py` — Full market monitor (3h cron)
+  - `scripts/war_intel_monitor.py` — War intel monitor (3h cron)
+  - `scripts/gold_alert_telegram.py` — Gold Telegram alert (30m cron)
+  - `scripts/tehran_time_sync.py` — Tehran time sync (5m cron)
+  - `scripts/backup.sh` — GitHub backup (12h cron)
 
 ---
 
